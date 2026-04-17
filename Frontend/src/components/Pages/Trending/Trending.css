@@ -1,0 +1,15 @@
+.trending {
+  padding: 60px;
+}
+
+.song-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+  gap: 20px;
+}
+
+.song-card {
+  padding: 20px;
+  background: #f5f5f5;
+  border-radius: 12px;
+}

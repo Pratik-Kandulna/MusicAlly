@@ -1,0 +1,30 @@
+.stats {
+  display: flex;
+  flex-wrap: wrap;   /* ✅ allow wrapping */
+  padding: 60px;
+  background: linear-gradient(90deg,#75c8ff,#b86bff);
+  border-radius: 25px;
+}
+
+/* 🔥 THIS IS THE MAIN FIX */
+.stats h2 {
+  width: 100%;        /* ✅ forces heading to full row */
+  margin-bottom: 30px;
+  font-size: 32px;
+}
+
+/* GRID */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+/* CARD */
+.stat-card {
+  background: rgba(255,255,255,0.2);
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+}

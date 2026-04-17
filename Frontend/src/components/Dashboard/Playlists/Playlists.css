@@ -1,0 +1,76 @@
+/* SECTION */
+.playlist-section {
+  padding: 20px 40px;
+}
+
+/* HEADER */
+.playlist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.playlist-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.create-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  border-radius: 7px;
+  background: rgb(204, 204, 204);
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px); /* Safari */
+  border: 1px solid rgba(204, 204, 204, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* GRID */
+.playlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+}
+
+/* CARD */
+.playlist-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+
+.playlist-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+}
+
+/* IMAGE (🔥 THIS FIXES YOUR ISSUE) */
+.playlist-card img {
+  width: 100%;
+  aspect-ratio: 4/3;     /* perfect size control */
+  object-fit: cover;     /* crop nicely */
+  display: block;
+}
+
+/* TEXT */
+.playlist-info {
+  padding: 12px;
+}
+
+.playlist-info h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.playlist-info p {
+  font-size: 13px;
+  color: #777;
+}

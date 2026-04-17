@@ -1,0 +1,91 @@
+/* SECTION */
+.jump-section {
+  padding: 30px 40px;
+}
+
+.jump-section h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+/* CONTAINER */
+.jump-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;  /* big left, small right */
+  gap: 20px;
+}
+
+/* CARD */
+.jump-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+
+.jump-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+}
+
+/* BIG CARD */
+.jump-card.large {
+  padding: 25px;
+}
+
+/* IMAGE */
+.jump-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+/* TEXT */
+.jump-info h3 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.jump-info p {
+  font-size: 13px;
+  color: #666;
+}
+
+.small-text {
+  font-size: 12px;
+  color: #999;
+}
+
+.artist {
+  margin-bottom: 10px;
+}
+
+/* PROGRESS BAR */
+.progress-bar {
+  width: 200px;
+  height: 5px;
+  background: #eee;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.progress {
+  width: 40%;   /* progress amount */
+  height: 100%;
+  background: linear-gradient(90deg,#ff4d8d,#ff8a00);
+  border-radius: 10px;
+}
+
+/* NEXT TEXT */
+.next {
+  margin-top: 5px;
+  font-size: 12px;
+  color: #888;
+}

@@ -1,0 +1,53 @@
+.featured {
+  padding: 70px 40px;
+  text-align: center;
+}
+
+.featured h2 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 40px;
+}
+
+/* GRID */
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+}
+
+/* CARD */
+.featured-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* IMAGE */
+.featured-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  transition: 0.4s ease;
+}
+
+/* OVERLAY */
+.overlay {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+  color: white;
+  text-align: left;
+}
+
+/* HOVER EFFECT */
+.featured-card:hover img {
+  transform: scale(1.1);
+}

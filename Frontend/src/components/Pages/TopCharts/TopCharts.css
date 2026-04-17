@@ -1,0 +1,15 @@
+.charts {
+  padding: 60px;
+}
+
+.charts ul {
+  list-style: none;
+  padding: 0;
+}
+
+.charts li {
+  padding: 15px;
+  margin-bottom: 10px;
+  background: #eee;
+  border-radius: 8px;
+}

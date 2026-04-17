@@ -1,0 +1,55 @@
+.artists {
+  padding: 60px 80px;
+ }
+
+ 
+.artists-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.view-all {
+  padding: 8px 16px;
+  border-radius: 10px;
+  background: linear-gradient(120deg,#7bc8ff,#b86bff);
+  color: white;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.view-all:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+
+.artist-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+}
+
+.artist-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.artist-card img {
+  width: 100%;
+  border-radius: 10px;
+  object-fit:cover;
+  transition: 0.4s ease;
+  
+}
+
+.artist-card:hover img {
+
+transform: translateY(-3px);
+  opacity: 0.9;
+}

@@ -1,0 +1,21 @@
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 20px;
+  padding: 40px 60px;
+  
+}
+
+.card {
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+  border-radius: 7px;
+  background:linear-gradient(120deg, rgb(131, 203, 255,0.5) ,  rgb(203, 131, 255, 0.5));
+
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px); /* Safari */
+  border: 1px solid rgba(204, 204, 204, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}

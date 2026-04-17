@@ -1,0 +1,15 @@
+.new-release {
+  padding: 60px;
+}
+
+.release-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+  gap: 20px;
+}
+
+.release-card {
+  padding: 20px;
+  background: #fafafa;
+  border-radius: 12px;
+}
