@@ -1,4 +1,4 @@
-import "./Genres.css";
+import "./genres.css";
 
 const genres = [
   { name: "Rock", icon: "🎸" },

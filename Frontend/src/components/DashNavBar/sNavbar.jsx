@@ -1,9 +1,9 @@
 import "./sNavbar.css";
-import { FaBell } from "react-icons/fa";
 import { useState, useRef, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import Home from "../Pages/Home/Home";
-import Trending from "../Pages/Trending/Trending";
+import { FaSearch } from "react-icons/fa";
+
+
 
 function SNavbar() {
   const [activeMenu, setActiveMenu] = useState(null);
@@ -37,7 +37,7 @@ function SNavbar() {
 
         {/* CENTER */}
         <ul className="snav-links">
-          <NavLink to="/">
+          <NavLink to="/Dashboard">
           <li>Home</li>
           </NavLink>
 
@@ -58,10 +58,19 @@ function SNavbar() {
                 <p>Top Charts</p>
                 </NavLink>
                 
+                <NavLink to="/AllGenres">
                 <p>Browse All Genres</p>
+                </NavLink>
               </div>
             )}
           </li>
+          
+          <NavLink to="/Browse"> 
+          <li className="browse">
+           <FaSearch/>
+           Browse
+           </li>
+          </NavLink>
 
           <li className="sdropdown" onClick={() => toggleMenu("collections")}>
             Collections ▾
@@ -92,12 +101,21 @@ function SNavbar() {
               </div>
             )}
           </li>
-
-          <li>Community</li>
+          
         </ul>
 
         {/* RIGHT */}
         <div className="snav-right">
+
+          <div className="search-bar">
+            <input
+                type="text"
+                placeholder="Search songs, artists..."
+               
+            />
+
+          </div>
+
           <div className="sicon">
             <NavLink to="/Login">
              <img src="/images/notification.png"/>
@@ -105,18 +123,14 @@ function SNavbar() {
             <span className="sdot"></span>
           </div>
 
-          <div className="sicon">
-            <img src="/images/search.png" />
-          </div>
+          
 
           <div className="sicon">
             <NavLink to="/Login">
             <img src="/images/user.png" />
             </NavLink>
           </div>
-          <NavLink to="/Login" className="scta-btn">
-          Get Started
-          </NavLink>
+          
         </div>
 
       </div>

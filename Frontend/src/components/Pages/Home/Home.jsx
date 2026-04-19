@@ -4,7 +4,7 @@ import Why from "../../WhySection/Why";
 import Featured from "../../Featured/Featured";
 import Genres from "../../Genres/Genres";
 import Artists from "../../ArtistsSection/Artists";
-import Stats from "../../Stats/Stats";
+import Stats from "../../stats/stats";
 
 function Home() {
   return (

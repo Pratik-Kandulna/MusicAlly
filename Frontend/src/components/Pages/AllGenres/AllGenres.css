@@ -1,0 +1,67 @@
+.genres-page {
+  background: #f5f5f7;
+  min-height: 100vh;
+  padding-top: 93px;
+}
+
+/* HERO */
+.genres-hero {
+  padding: 60px;
+  color: white;
+  background: linear-gradient(90deg, #7b2ff7, #f107a3);
+}
+
+.genres-hero h1 {
+  font-size: 60px;
+  margin-bottom: 10px;
+}
+
+.genres-hero p {
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+/* GRID */
+.genres-container {
+  padding: 40px 60px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+}
+
+/* CARD */
+.genre-card {
+  height: 180px;
+  border-radius: 20px;
+  padding: 20px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  object-fit: contain;
+  transition: 0.3s;
+}
+
+.genre-card:hover {
+  transform: scale(1.05);
+}
+
+.genre-card h2 {
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.genre-card p {
+  margin-top: 5px;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* ICON */
+.music-icon {
+  position: absolute;
+  bottom: 15px;
+  right: 20px;
+  font-size: 60px;
+  opacity: 0.2;
+}

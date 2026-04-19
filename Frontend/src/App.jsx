@@ -5,6 +5,8 @@ import Trending from "./components/Pages/Trending/Trending";
 import TopCharts from "./components/Pages/TopCharts/TopCharts";
 import NewRelease from "./components/Pages/NewRelease/NewRelease";
 import Dashboard from "./components/Pages/Home/Dashboard";
+import AllGenres from "./components/Pages/AllGenres/AllGenres";
+import Browse from "./components/Pages/Browse/Browse";
 
 function App() {
   return (
@@ -14,7 +16,10 @@ function App() {
       <Route path="/Trending" element={<Trending />} />
       <Route path="/Topcharts" element={<TopCharts />} />
       <Route path="/NewRelease" element={<NewRelease />} />
+      <Route path="/AllGenres" element={<AllGenres />} />
       <Route path="/Dashboard" element={<Dashboard/>} />
+      <Route path="/Browse" element={<Browse/>} />
+
     </Routes>
   );
 }

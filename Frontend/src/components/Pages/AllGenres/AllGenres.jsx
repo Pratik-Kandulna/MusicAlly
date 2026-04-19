@@ -1,0 +1,65 @@
+import SNavbar from "../../DashNavBar/sNavbar";
+import Footer from "../../Dashboard/Footer/Footer";
+import "../Home/dashboard.css";
+import "./AllGenres.css";
+
+
+
+
+const genres = [
+  { name: "Pop", tracks: "18.2K", color: "#ff4d8d" },
+  { name: "Rock", tracks: "12.4K", color: "#ff6a00" },
+  { name: "Hip Hop", tracks: "10.8K", color: "#ff9900" },
+  { name: "Electronic", tracks: "15.3K", color: "#ff4db8" },
+  { name: "Jazz", tracks: "8.6K", color: "#00c6ff" },
+  { name: "Classical", tracks: "6.4K", color: "#7f7fd5" },
+  { name: "R&B", tracks: "9.2K", color: "#00b894" },
+  { name: "Country", tracks: "7.5K", color: "#f39c12" },
+  { name: "Latin", tracks: "11.1K", color: "#ff5733" },
+  { name: "K-Pop", tracks: "13.7K", color: "#e84393" },
+  { name: "Indie", tracks: "8.9K", color: "#0984e3" },
+  { name: "Metal", tracks: "5.8K", color: "#636e72" }
+];
+
+function AllGenres() {
+  return (
+    <>
+     <div className="dashboard-container">
+     
+             
+
+      <div className="genres-page">
+        <SNavbar/>
+
+        {/* HERO */}
+        <div className="genres-hero">
+          <h1>Browse Genres</h1>
+          <p>Explore music across all your favorite genres</p>
+        </div>
+
+        {/* GRID */}
+        <div className="genres-container">
+          {genres.map((g, index) => (
+            <div
+              className="genre-card"
+              key={index}
+              style={{
+                background: `linear-gradient(135deg, ${g.color}, rgba(0,0,0,0.4))`
+              }}
+            >
+              <h2>{g.name}</h2>
+              <p>{g.tracks} tracks</p>
+
+              <div className="music-icon">♪</div>
+            </div>
+          ))}
+        </div>
+
+      </div>
+      <Footer/>
+      </div>
+    </>
+  );
+}
+
+export default AllGenres;
