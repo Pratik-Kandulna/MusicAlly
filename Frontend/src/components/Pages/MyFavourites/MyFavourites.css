@@ -1,0 +1,86 @@
+.fav-page {
+  margin-top: 90px; /* navbar space */
+  padding: 20px;
+  background: #f5f5f5;
+}
+
+/* HERO */
+.fav-hero {
+  background: linear-gradient(120deg, #ff4d8d, #ff8a00);
+  color: white;
+  padding: 60px 30px;
+  border-radius: 12px;
+}
+
+.fav-hero h1 {
+  font-size: 42px;
+}
+
+.fav-hero p {
+  margin-top: 10px;
+  opacity: 0.9;
+}
+
+/* SECTION */
+.fav-section {
+  margin-top: 30px;
+}
+
+.fav-section h2 {
+  margin-bottom: 20px;
+}
+
+/* LIST */
+.fav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* CARD */
+.fav-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+/* IMAGE */
+.fav-card img {
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* INFO */
+.fav-info {
+  flex: 1;
+}
+
+.fav-info h3 {
+  margin: 0;
+}
+
+.fav-info p {
+  margin: 5px 0 0;
+  color: #666;
+}
+
+/* PLAYS */
+.plays {
+  color: #999;
+}
+
+/* BUTTON */
+.play-btn {
+  border: none;
+  padding: 10px 15px;
+  border-radius: 10px;
+  background: linear-gradient(90deg,#ff4d8d,#ff8a00);
+  color: white;
+  cursor: pointer;
+}

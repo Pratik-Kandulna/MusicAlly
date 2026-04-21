@@ -7,6 +7,10 @@ import NewRelease from "./components/Pages/NewRelease/NewRelease";
 import Dashboard from "./components/Pages/Home/Dashboard";
 import AllGenres from "./components/Pages/AllGenres/AllGenres";
 import Browse from "./components/Pages/Browse/Browse";
+import Favourites from "./components/Pages/MyFavourites/MyFavourites";
+import Playlists from "./components/Pages/MyPlaylists/MyPlaylists";
+import SavedAlbums from "./components/Pages/SavedAlbums/SavedAlbums";
+import Profile from "./components/Pages/Profile/Profile";
 
 function App() {
   return (
@@ -19,6 +23,11 @@ function App() {
       <Route path="/AllGenres" element={<AllGenres />} />
       <Route path="/Dashboard" element={<Dashboard/>} />
       <Route path="/Browse" element={<Browse/>} />
+      <Route path="/Myfavourites" element={<Favourites/>} />
+      <Route path="/MyPlaylists" element={<Playlists/>} />
+      <Route path="/SavedAlbums" element={<SavedAlbums/>} />
+      <Route path="/Profile" element={<Profile/>} />
+
 
     </Routes>
   );

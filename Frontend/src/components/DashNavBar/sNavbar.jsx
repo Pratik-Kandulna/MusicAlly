@@ -76,33 +76,42 @@ function SNavbar() {
             Collections ▾
             {activeMenu === "collections" && (
               <div className="sdropdown-menu">
-                <NavLink to="/Login">
+                <NavLink to="/MyFavourites">
                 <p>My Favorites</p>
                 </NavLink>
                 
-                <NavLink to="/Login">
-                <p>New Playlists</p>
+                <NavLink to="/MyPlaylists">
+                <p>My Playlists</p>
                 </NavLink>
                 
-                <NavLink to="/Login">
-                <p>Create New Playlists</p>
+                
+
+                <NavLink to="/SavedAlbums">
+                <p>Saved Albums</p>
                 </NavLink>
                 
               </div>
             )}
           </li>
-
+            {/*
           <li className="sdropdown" onClick={() => toggleMenu("artists")}>
             Artists ▾
             {activeMenu === "artists" && (
               <div className="sdropdown-menu">
                 <p>Top Artists</p>
                 <p>New Artists</p>
+
+                <NavLink to="/Login">
+                <p>Followed Artists</p>
+                </NavLink>
+
               </div>
             )}
           </li>
-          
+          */}
+
         </ul>
+        
 
         {/* RIGHT */}
         <div className="snav-right">
@@ -126,11 +135,17 @@ function SNavbar() {
           
 
           <div className="sicon">
-            <NavLink to="/Login">
+
+            <NavLink to="/Profile">
             <img src="/images/user.png" />
             </NavLink>
+            
           </div>
+            
           
+          
+        
+
         </div>
 
       </div>
