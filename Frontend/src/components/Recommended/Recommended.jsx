@@ -2,24 +2,24 @@ import "./Recommended.css";
 
 const RPlaylists = [
   {
-    title: "Workout Mix",
+    title: "Cosmic Tunes",
     tracks: "45 tracks • 3h 12m",
-    img: "/images/workout.jpg",
+    img: "/images/Cosmic Tunes.jpeg",
   },
   {
-    title: "Chill Vibes",
+    title: "Nightfall Notes",
     tracks: "32 tracks • 2h 24m",
-    img: "/images/chill.jpg",
+    img: "/images/Nightfall Notes.jpg",
   },
   {
-    title: "Study Focus",
+    title: "Lost Souls",
     tracks: "28 tracks • 2h 45m",
-    img: "/images/study.jpg",
+    img: "/images/Lost Souls.jpeg",
   },
   {
-    title: "Party Hits",
+    title: "verload",
     tracks: "52 tracks • 3h 48m",
-    img: "/images/party.jpg",
+    img: "/images/Overload.jpeg",
   },
 ];
 

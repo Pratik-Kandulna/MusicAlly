@@ -7,37 +7,37 @@ const releases = [
   {
     title: "Echo Nights",
     artist: "Luna Waves",
-    img: "/images/release1.jpg",
+    img: "/images/Echo Nights.jpeg",
     date: "Apr 2026"
   },
   {
     title: "Neon Dreams",
     artist: "Nova Beats",
-    img: "/images/release2.jpg",
+    img: "/images/Neon Dreams.jpeg",
     date: "Mar 2026"
   },
   {
     title: "Skyline",
     artist: "DJ Pulse",
-    img: "/images/release3.jpg",
+    img: "/images/Skyline.jpeg",
     date: "Mar 2026"
   },
   {
     title: "Golden Hour",
     artist: "Aurora",
-    img: "/images/release4.jpg",
+    img: "/images/ Golden Hour.jpeg",
     date: "Feb 2026"
   },
   {
     title: "Midnight Drive",
     artist: "The Saxman",
-    img: "/images/release5.jpg",
+    img: "/images/Midnight Drive.jpeg",
     date: "Feb 2026"
   },
   {
     title: "Electric Soul",
     artist: "Spectrum",
-    img: "/images/release6.jpg",
+    img: "/images/Electric Soul.jpeg",
     date: "Jan 2026"
   }
 ];

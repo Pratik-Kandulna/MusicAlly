@@ -4,22 +4,22 @@ const playlists = [
   {
     title: "Workout Mix",
     tracks: "45 tracks • 3h 12m",
-    img: "/images/workout.jpg",
+    img: "/images/Workout Mix.jpeg",
   },
   {
     title: "Chill Vibes",
     tracks: "32 tracks • 2h 24m",
-    img: "/images/chill.jpg",
+    img: "/images/Chill  Vibes.jpeg",
   },
   {
     title: "Study Focus",
     tracks: "28 tracks • 2h 45m",
-    img: "/images/study.jpg",
+    img: "/images/Study Focus.jpeg",
   },
   {
     title: "Party Hits",
     tracks: "52 tracks • 3h 48m",
-    img: "/images/party.jpg",
+    img: "/images/Party Hits.jpeg",
   },
 ];
 

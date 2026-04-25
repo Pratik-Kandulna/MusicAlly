@@ -12,15 +12,15 @@ function JumpBack() {
         <div className="jump-card large">
 
           <img
-            src="/images/music.jpg"
+            src="/images/Perfect.jpg"
             alt="current song"
             className="jump-img"
           />
 
           <div className="jump-info">
             <p className="small-text">Continue listening to</p>
-            <h3>Electric Dreams</h3>
-            <p className="artist">Luna Rivers</p>
+            <h3>Perfect</h3>
+            <p className="artist">ED Sheeran</p>
 
             {/* PROGRESS BAR */}
             <div className="progress-bar">
@@ -33,7 +33,7 @@ function JumpBack() {
         <div className="jump-card">
 
           <img
-            src="/images/playlist.jpg"
+            src="/images/Workout Mix.jpeg"
             alt="playlist"
             className="jump-img"
           />
