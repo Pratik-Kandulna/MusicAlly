@@ -1,0 +1,113 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+function Upload() {
+const navigate = useNavigate();
+
+  const [title, setTitle] = useState("");
+  const [artist, setArtist] = useState("");
+  const [cover, setCover] = useState(null);
+  const [audio, setAudio] = useState(null);
+
+  const handleUpload = async (e) => {
+    e.preventDefault();
+     console.log("Upload clicked");
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("artist", artist);
+    formData.append("cover", cover);
+    formData.append("audio", audio);
+
+    if (!cover || !audio) {
+  alert("Please select files");
+  return;
+}
+
+    try {
+      const res = await fetch("http://localhost:3000/api/songs", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.log("SERVER ERROR:", data);
+        throw new Error(data.message || "Upload failed");
+      }
+
+console.log(data);
+alert("Song Uploaded ✅");
+navigate("/Dashboard", { state: { refresh: true } }); 
+
+      // reset
+      setTitle("");
+      setArtist("");
+      setCover(null);
+      setAudio(null);
+
+    } catch (err) {
+      console.log("UPLOAD ERROR:", err);
+      alert("Upload failed ❌");
+    }
+  };
+
+  
+
+
+
+
+  return (
+    <div style={{ padding: "40px" }}>
+      <h2>Upload Song</h2>
+
+      <form onSubmit={handleUpload}>
+        <input
+          type="text"
+          placeholder="Song Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+        <br /><br />
+
+        <input
+          type="text"
+          placeholder="Artist"
+          value={artist}
+          onChange={(e) => setArtist(e.target.value)}
+          required
+        />
+        <br /><br />
+
+        <span>Cover: </span>
+        <input
+          type="file"
+          placeholder="Cover"
+          accept="image/*"
+          onChange={(e) => setCover(e.target.files[0])}
+          required
+        />
+        <br /><br />
+
+        <span>Song: </span>
+        <input
+          type="file"
+          
+          accept="audio/*"
+          onChange={(e) => setAudio(e.target.files[0])}
+          required
+        />
+        
+       
+        <br /><br />
+
+        <button  type="submit">Upload</button>
+       
+      </form>
+    </div>
+  );
+}
+
+export default Upload;

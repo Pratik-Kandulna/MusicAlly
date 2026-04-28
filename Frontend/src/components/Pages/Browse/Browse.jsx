@@ -19,10 +19,14 @@ const categories = [
 ];
 
 const artists = [
-  { name: "The Weeknd", img: "/images/artist1.jpg" },
-  { name: "Taylor Swift", img: "/images/artist2.jpg" },
-  { name: "Drake", img: "/images/artist3.jpg" },
-  { name: "Billie Eilish", img: "/images/artist4.jpg" }
+  { name: "The Weeknd", 
+    img: "/images/artist1.jpg" },
+  { name: "Taylor Swift", 
+    img: "/images/artist2.jpg" },
+  { name: "Drake", 
+    img: "/images/artist3.jpg" },
+  { name: "Billie Eilish", 
+    img: "/images/artist4.jpg" }
 ];
 
 function Browse() {

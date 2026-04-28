@@ -4,8 +4,8 @@ import { NavLink } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 
 
+function SNavbar({ search, setSearch }) {
 
-function SNavbar() {
   const [activeMenu, setActiveMenu] = useState(null);
   const menuRef = useRef(null);
 
@@ -120,6 +120,8 @@ function SNavbar() {
             <input
                 type="text"
                 placeholder="Search songs, artists..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
                
             />
 

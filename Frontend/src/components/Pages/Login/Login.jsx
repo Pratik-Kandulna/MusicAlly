@@ -1,8 +1,20 @@
-import { NavLink } from "react-router-dom";
 import "./Login.css";
 import { FaUser, FaEnvelope, FaLock, FaGoogle, FaFacebookF, FaTwitter } from "react-icons/fa";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 function Login() {
+
+  const navigate = useNavigate();
+  const [role, setRole] = useState("user");
+
+  const handleLogin = (e) => {
+  e.preventDefault();
+  localStorage.setItem("role", role);
+  navigate("/Dashboard");
+};
+
+
   return (
     <div className="signup-page">
 
@@ -46,10 +58,36 @@ function Login() {
 
         {/* RIGHT SIDE */}
         <div className="signup-card">
-          <h3>Create Account</h3>
+          <h3>Login</h3>
           <p className="sub">Join the music revolution today</p>
+          
 
-          <form>
+          <form onSubmit={handleLogin}>
+
+            {/***********ROLE************/}
+            <div className="Role-input-box">
+              <p>Login as:</p>
+              <div style={{ display: "flex", justifyContent:"space-between" }}>
+                  <input
+                    type="checkbox"
+                    checked={role === "user"}
+                    onChange={() => setRole("user")}
+                  />
+                    <span>User</span>
+
+                <input
+                    type="checkbox"
+                    checked={role === "admin"}
+                    onChange={() => setRole("admin")}
+                    style={{marginLeft:"40px",
+                        border:"1px solid black"
+                    }}
+                  />
+                    <span>Admin</span>
+                    
+              </div>
+            </div>
+
             <div className="input-box">
               <FaUser />
               <input type="text" placeholder="Full Name" />
@@ -71,9 +109,13 @@ function Login() {
                 I agree to <b>Terms of Service</b> and <b>Privacy Policy</b>
               </span>
             </div>
-          <NavLink to="/Dashboard">
-            <button className="signup-btn">Create Account</button>
-            </NavLink>
+
+            
+            <button className="signup-btn" type="submit" onClick={handleLogin}>
+                     Login
+            </button>    
+
+          
           </form>
 
           <div className="divider">Or sign up with</div>

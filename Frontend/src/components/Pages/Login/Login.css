@@ -116,6 +116,20 @@
   padding: 12px;
   border-radius: 10px;
   margin-bottom: 15px;
+  
+}
+
+.Role-input-box{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f2f2f2;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  justify-content: center;
+  width:fit-content;
+
 }
 
 .input-box input {

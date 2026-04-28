@@ -67,15 +67,15 @@ function Navbar() {
             Collections ▾
             {activeMenu === "collections" && (
               <div className="dropdown-menu">
-                <NavLink to="/Login">
+                <NavLink to="/CreateAcc">
                 <p>My Favorites</p>
                 </NavLink>
                 
-                <NavLink to="/Login">
+                <NavLink to="/CreateAcc">
                 <p>New Playlists</p>
                 </NavLink>
                 
-                <NavLink to="/Login">
+                <NavLink to="/CreateAcc">
                 <p>Create New Playlists</p>
                 </NavLink>
                 
@@ -99,7 +99,7 @@ function Navbar() {
         {/* RIGHT */}
         <div className="nav-right">
           <div className="icon">
-            <NavLink to="/Login">
+            <NavLink to="/CreateAcc">
              <img src="/images/notification.png"/>
             </NavLink>
             <span className="dot"></span>
@@ -110,11 +110,11 @@ function Navbar() {
           </div>
 
           <div className="icon">
-            <NavLink to="/Login">
+            <NavLink to="/CreateAcc">
             <img src="/images/user.png" />
             </NavLink>
           </div>
-          <NavLink to="/Login" className="cta-btn">
+          <NavLink to="/CreateAcc" className="cta-btn">
           Get Started
           </NavLink>
         </div>

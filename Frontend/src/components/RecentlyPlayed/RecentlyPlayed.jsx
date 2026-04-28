@@ -1,42 +1,70 @@
 import "./RecentlyPlayed.css";
-import { FaPlay, FaEllipsisH, FaCheckCircle } from "react-icons/fa";
 
-const songs = [
-  {
-    id: 1,
-    title: "Perfect",
-    artist: "ED Sheeran",
-    album: "Electric Nights",
-    time: "3:45",
-    img: "/images/Perfect.jpg",
-    added: "2 hours ago",
-    played: false,
-  },
-  {
-    id: 2,
-    title: "Baby",
-    artist: "Justin Bieber",
-    album: "Jazz Essentials",
-    time: "4:12",
-    img: "/images/Baby.jpg",
-    added: "2 weeks ago",
-    played: true,
-  },
-  {
-    id: 3,
-    title: "Faded",
-    artist: "Alan Walker",
-    album: "Beat Machine",
-    time: "5:23",
-    img: "/images/Faded.jpeg",
-    added: "25 Feb 2026",
-    played: false,
-  },
-];
-
-function RecentlyPlayed() {
+function RecentlyPlayed({ filteredSongs, setCurrentSong, setCurrentIndex, currentSong }) {
   return (
     <div className="recent-section">
+      
+      <div className="recent-header">
+        <h2>Recently Played</h2>
+      </div>
+
+      <div className="recent-scroll">
+        {filteredSongs && filteredSongs.slice(0, 10).map((song, index) => (
+          
+          <div
+            key={song._id}
+            className={`song-card ${
+              currentSong?._id === song._id ? "active" : ""}`}
+            onClick={() => {
+              setCurrentSong(song);
+              setCurrentIndex(index);
+            }}
+          >
+
+            <div className="img-wrapper">
+              <img
+                src={`http://localhost:3000/${song.coverImage}`}
+                alt={song.title}
+              />
+
+              {/* PLAY BUTTON */}
+              <div
+                className="play-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCurrentSong(song);
+                }}
+              >
+                ▶
+              </div>
+            </div>
+
+            <h4>{song.title}</h4>
+            <p>{song.artist}</p>
+
+          </div>
+
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default RecentlyPlayed;
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    {/*  <div className="recent-section">
 
       <div className="recent-header">
         <h2>Recently Played</h2>
@@ -47,13 +75,13 @@ function RecentlyPlayed() {
         {songs.map((song, index) => (
           <div className="recent-row" key={song.id}>
 
-            {/* INDEX / PLAY */}
+            {/* INDEX / PLAY *
             <div className="index-box">
               <span className="index">{index + 1}</span>
               <FaPlay className="play-icon" />
             </div>
 
-            {/* SONG */}
+            {/* SONG *
             <div className="song-info">
               <img src={song.img} alt="" />
               <div>
@@ -62,13 +90,13 @@ function RecentlyPlayed() {
               </div>
             </div>
 
-            {/* ALBUM */}
+            {/* ALBUM *
             <span className="album">{song.album}</span>
 
-            {/* ADDED */}
+            {/* ADDED *
             <span className="added">{song.added}</span>
 
-            {/* RIGHT SIDE */}
+            {/* RIGHT SIDE *
             <div className="right-section">
 
               {song.played && (
@@ -83,9 +111,29 @@ function RecentlyPlayed() {
 
           </div>
         ))}
+
+        
       </div>
     </div>
   );
 }
 
 export default RecentlyPlayed;
+
+
+{/*
+{songs && songs.slice(0, 5).map((song) => (
+      <div key={song._id}>
+        
+        <img
+          src={`http://localhost:3000/${song.coverImage}`}
+          alt={song.title}
+          width="100"
+        />
+
+        <p>{song.title}</p>
+        <p>{song.artist}</p>
+
+      </div>
+    ))}
+    */}

@@ -8,6 +8,7 @@ import Stats from "../../stats/stats";
 
 function Home() {
   return (
+    
     <div>
       <Navbar />
       <Hero />

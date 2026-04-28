@@ -46,3 +46,27 @@
 .navbar .form-control {
   padding: .75rem 1rem;
 }
+
+.AllSongs-Container{
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  
+
+}
+
+.AllSongs-Container img{
+  height: 90px;
+  width: 90px;
+}
+.AllSongs-Card{
+  border: 1px solid grey;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  max-width: 100px;
+  max-height: auto;
+  padding: 2px;
+  align-items: center;
+  margin: 10px;
+}
