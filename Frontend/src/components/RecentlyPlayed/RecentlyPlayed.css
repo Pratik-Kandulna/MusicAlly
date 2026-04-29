@@ -166,6 +166,9 @@
   min-width: 160px;
   cursor: pointer;
   transition: transform 0.3s ease;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  padding: 2px;
 }
 
 .song-card:hover {
@@ -221,7 +224,16 @@
 }
 
 .song-card.active {
-  border: 2px solid #1db954;
+  border-radius: 10px;
+  padding: 2px;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(120deg, rgb(123, 200, 255, 0.4), rgb(184, 107, 255, 0.4));
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px); 
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+
 }
 
 .recent-scroll {

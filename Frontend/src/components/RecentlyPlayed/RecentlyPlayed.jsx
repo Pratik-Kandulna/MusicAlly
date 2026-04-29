@@ -1,6 +1,6 @@
 import "./RecentlyPlayed.css";
 
-function RecentlyPlayed({ filteredSongs, setCurrentSong, setCurrentIndex, currentSong }) {
+function RecentlyPlayed({ songs, setCurrentSong, setCurrentIndex, currentSong }) {
   return (
     <div className="recent-section">
       
@@ -9,7 +9,7 @@ function RecentlyPlayed({ filteredSongs, setCurrentSong, setCurrentIndex, curren
       </div>
 
       <div className="recent-scroll">
-        {filteredSongs && filteredSongs.slice(0, 10).map((song, index) => (
+        {songs.slice(0, 10).map((song, index) => (
           
           <div
             key={song._id}

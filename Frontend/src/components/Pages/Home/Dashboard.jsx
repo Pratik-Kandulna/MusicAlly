@@ -12,7 +12,7 @@ import "./dashboard.css";
 
 import { useRef, useState, useEffect } from "react";
 
-function Dashboard({ songs, setSongs, search, setSearch  }) {
+function Dashboard({ songs, setSongs, search, setSearch,}) {
 
 {/****************-UseNavigate-**************/}
   const navigate = useNavigate();
@@ -33,11 +33,8 @@ function Dashboard({ songs, setSongs, search, setSearch  }) {
 
   return title.includes(query) || artist.includes(query);
 });
-console.log("Search:", search);
-console.log("Songs:", songs);
-console.log("Filtered:", filteredSongs.length);
 
-
+  const [recentSongs, setRecentSongs] = useState([]);
   const [currentSong, setCurrentSong] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -161,18 +158,50 @@ useEffect(() => {
   }
 }, [currentSong]);
 
+
+useEffect(() => {
+  if (!currentSong) return;
+
+  setRecentSongs((prev) => {
+    const filtered = prev.filter(
+      (song) => song._id !== currentSong._id
+    );
+
+    return [currentSong, ...filtered].slice(0, 10);
+  });
+
+}, [currentSong]);
+
+
+// LOAD once
+useEffect(() => {
+  const stored = JSON.parse(localStorage.getItem("recentSongs"));
+  if (stored) setRecentSongs(stored);
+}, []);
+
+// SAVE when updated
+useEffect(() => {
+  localStorage.setItem("recentSongs", JSON.stringify(recentSongs));
+}, [recentSongs]);
+
 console.log("Search:", search);
 console.log("Songs:", songs.length);
 console.log("Filtered:", filteredSongs.length);
+
+
   return (
   <>
     <div className="dashboard-container">
 
-      <SNavbar search={search} setSearch={setSearch} />
+      <SNavbar search={search}
+        setSearch={setSearch}
+        songs={songs}
+        setCurrentSong={setCurrentSong}
+      />
       <Welcome />
       <QuickCards />
       <RecentlyPlayed 
-        songs={songs} 
+        songs={recentSongs} 
         filteredSongs={filteredSongs}
         setCurrentSong={setCurrentSong}
         setCurrentIndex={setCurrentIndex} 
@@ -197,58 +226,41 @@ console.log("Filtered:", filteredSongs.length);
   </div>
 )}
 
+    {role === "admin" && (
+      <>
       <h2>All Songs</h2>
-
+      
       <div className="AllSongs-Container">
         
-        {filteredSongs?.map((song) => (
-          <div className="AllSongs-Card"
-            key={song._id}
-            onClick={() => {
-              setCurrentSong(song);
-              setIsPlaying(true);
-            }}
-          >
-            <img
-              src={`http://localhost:3000/${song.coverImage}`}
-              width="120"
-            />
-            <p>{song.title} - {song.artist}</p>
-        {/*****************-DELETE-BUTTON-***********************/}
-    {role === "admin" && (
-      <button onClick={() => deleteSong(song._id)}>
-        Delete
-      </button>
-    )}
+    {songs?.map((song) => (
+      <div className="AllSongs-Card"
+        key={song._id}
+        onClick={() => {
+          setCurrentSong(song);
+          setIsPlaying(true);
+        }}
+      > 
+        <img
+          src={`http://localhost:3000/${song.coverImage}`}
+          width="120"
+        />
+        <p>{song.title} - {song.artist}</p> 
+        {/* DELETE-BUTTON */}
+        <button onClick={() => deleteSong(song._id)}>
+          Delete
+        </button>
+      </div>
+    ))}
   </div>
-  ))}
-</div>
+  </>
+)}
 
       <Footer />
     </div>
 
     {/* ✅ PLAYER INSIDE SAME RETURN */}
     {currentSong && (
-      <div style={{ 
-      position: "fixed",
-      bottom: 0,
-      left: 0,
-      marginLeft:"5px",
-      marginBottom:"2px",
-      width: "96.5%",
-      borderRadius: "10px",
-      color: "black",
-      padding: "10px 20px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      background: "rgba(97, 66, 160, 0.5)",
-      backdropFilter: "blur(50px)",
-      WebkitBackdropFilter: "blur(50px)", 
-      border: "1px solid rgba(255, 255, 255, 0.2)",
-      boxShadow: "0 8px 32px rgba(0, 0, 0, 0.2)",
-      zIndex: 9999 
-      }}>
+      <div  className="Player">
         {/* LEFT */}
 
   <div style={{ display: "flex", alignItems: "center", gap: "10px", width: "25%" }}>

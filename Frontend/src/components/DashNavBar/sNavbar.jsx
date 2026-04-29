@@ -4,8 +4,9 @@ import { NavLink } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 
 
-function SNavbar({ search, setSearch }) {
+function SNavbar({ search, setSearch, songs, setCurrentSong }) {
 
+  const searchRef = useRef(null);
   const [activeMenu, setActiveMenu] = useState(null);
   const menuRef = useRef(null);
 
@@ -19,11 +20,34 @@ function SNavbar({ search, setSearch }) {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
         setActiveMenu(null);
       }
+
+     // 🔥 close search dropdown
+     if (searchRef.current && !searchRef.current.contains(e.target)) {
+      setSearch(""); // clears input → dropdown disappears
+    }
     };
 
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
+
+
   }, []);
+
+{/**************-FILTER-SONGS-***************/}
+
+  const filteredSongs = Array.isArray(songs)
+  ? songs.filter(song => {
+      const title = song.title?.toLowerCase() || "";
+      const artist = song.artist?.toLowerCase() || "";
+      const query = search?.toLowerCase() || "";
+
+      if (!query) return false;
+
+      return title.includes(query) || artist.includes(query);
+    })
+  : [];
+
+
 
   return (
     <nav className="snavbar" ref={menuRef}>
@@ -116,14 +140,40 @@ function SNavbar({ search, setSearch }) {
         {/* RIGHT */}
         <div className="snav-right">
 
-          <div className="search-bar">
+          <div className="search-bar" ref={searchRef}>
             <input
                 type="text"
                 placeholder="Search songs, artists..."
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
-               
+                onChange={(e) => setSearch(e.target.value)}        
             />
+            {search && (
+            <div className="search-dropdown">
+              {filteredSongs && filteredSongs.length > 0 ? (
+                filteredSongs.slice(0, 5).map((song, index) => (
+                <div
+                  key={song._id}
+                  className="search-item"
+                  onClick={() => {
+                    setCurrentSong(song);
+                    setSearch(""); // close dropdown
+                  }}
+                >
+            <img
+              src={`http://localhost:3000/${song.coverImage}`}
+              width="40"
+            />
+            <div>
+              <p>{song.title}</p>
+              <small>{song.artist}</small>
+            </div>
+          </div>
+        ))
+      ) : (
+        <p className="no-result">No results</p>
+      )}
+    </div>
+  )}
 
           </div>
 

@@ -48,7 +48,14 @@ function App() {
       <Route path="/Topcharts" element={<TopCharts />} />
       <Route path="/NewRelease" element={<NewRelease />} />
       <Route path="/AllGenres" element={<AllGenres />} />
-      <Route path="/Dashboard" element={<Dashboard songs={songs} setSongs={setSongs} search={search} setSearch={setSearch}/>} />
+      <Route path="/Dashboard" element={ <> <SNavbar search={search} setSearch={setSearch} />
+                                        <Dashboard songs={songs} 
+                                          setSongs={setSongs} 
+                                          search={search} 
+                                          setSearch={setSearch}
+                                          />
+                                          </>
+                                        } />
       <Route path="/Browse" element={<Browse />} />
       <Route path="/Myfavourites" element={<Favourites />} />
       <Route path="/MyPlaylists" element={<Playlists />} />
@@ -56,7 +63,7 @@ function App() {
       <Route path="/Profile" element={<Profile />} />
       <Route path="/Upload" element={<Upload />} />
     </Routes>
-    <SNavbar search={search} setSearch={setSearch} />
+    
     </>
   );
 }
