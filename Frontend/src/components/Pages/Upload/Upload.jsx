@@ -8,6 +8,8 @@ const navigate = useNavigate();
   const [artist, setArtist] = useState("");
   const [cover, setCover] = useState(null);
   const [audio, setAudio] = useState(null);
+  const [genre, setGenre] = useState("");
+  const [album, setAlbum] = useState(null);
 
   const handleUpload = async (e) => {
     e.preventDefault();
@@ -18,6 +20,8 @@ const navigate = useNavigate();
     formData.append("artist", artist);
     formData.append("cover", cover);
     formData.append("audio", audio);
+    formData.append("genre", genre);
+    formData.append("album", album);
 
     if (!cover || !audio) {
   alert("Please select files");
@@ -33,6 +37,8 @@ const navigate = useNavigate();
       const data = await res.json();
 
       if (!res.ok) {
+        setSongs((prev) => prev.filter((song) => song._id !== id));
+
         console.log("SERVER ERROR:", data);
         throw new Error(data.message || "Upload failed");
       }
@@ -46,6 +52,8 @@ navigate("/Dashboard", { state: { refresh: true } });
       setArtist("");
       setCover(null);
       setAudio(null);
+      setGenre("");
+      setAlbum(null);
 
     } catch (err) {
       console.log("UPLOAD ERROR:", err);
@@ -81,6 +89,26 @@ navigate("/Dashboard", { state: { refresh: true } });
         />
         <br /><br />
 
+        <select value={genre} required onChange={(e) => setGenre(e.target.value)}>
+          <option value="">Select Genre</option>
+          <option value="pop">Pop</option>
+          <option value="hip hop">Hip Hop</option>
+          <option value="pop rock">Pop Rock</option>
+          <option value="lofi">Lo-fi</option>
+        </select>
+
+        <br /><br />  
+
+        <input
+          type="text"
+          placeholder="Album"
+          value={album}
+          onChange={(e) => setAlbum(e.target.value)}
+          
+        />
+
+        <br /><br />
+
         <span>Cover: </span>
         <input
           type="file"
@@ -99,9 +127,9 @@ navigate("/Dashboard", { state: { refresh: true } });
           onChange={(e) => setAudio(e.target.files[0])}
           required
         />
-        
-       
         <br /><br />
+
+        
 
         <button  type="submit">Upload</button>
        

@@ -2,7 +2,7 @@ import SNavbar from "../../DashNavBar/sNavbar";
 import Footer from "../../Dashboard/Footer/Footer";
 import "../Home/dashboard.css";
 import "./AllGenres.css";
-
+import { useOutletContext } from "react-router-dom";
 
 
 
@@ -22,6 +22,10 @@ const genres = [
 ];
 
 function AllGenres() {
+
+const { songs, setSongs, search, setSearch } = useOutletContext();
+
+
   return (
     <>
      <div className="dashboard-container">
@@ -29,7 +33,7 @@ function AllGenres() {
              
 
       <div className="genres-page">
-        <SNavbar/>
+        
 
         {/* HERO */}
         <div className="genres-hero">

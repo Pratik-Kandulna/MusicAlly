@@ -34,8 +34,6 @@ function Playlists() {
 
       <div className="playlist-page">
 
-        <SNavbar />
-
         {/* HERO */}
         <div className="playlist-hero">
           <h1>My Playlists</h1>

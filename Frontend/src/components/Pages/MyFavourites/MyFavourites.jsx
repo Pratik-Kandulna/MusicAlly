@@ -2,6 +2,7 @@ import "./MyFavourites.css";
 import SNavbar from "../../DashNavBar/sNavbar";
 import "../Home/dashboard.css";
 import Footer from "../../Dashboard/Footer/Footer";
+import { useOutletContext } from "react-router-dom";
 
 const favourites = [
   {
@@ -31,13 +32,16 @@ const favourites = [
 ];
 
 function Favourites() {
+
+const { songs, setSongs, search, setSearch } = useOutletContext();
+
+
   return (
     <>
       <div className="dashboard-container">
 
       <div className="fav-page">
-
-        <SNavbar />
+        
 
         {/* HERO */}
         <div className="fav-hero">

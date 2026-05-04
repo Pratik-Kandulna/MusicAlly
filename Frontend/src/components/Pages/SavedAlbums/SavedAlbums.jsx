@@ -2,6 +2,7 @@ import SNavbar from "../../DashNavBar/sNavbar";
 import Footer from "../../Dashboard/Footer/Footer";
 import "../Home/dashboard.css";
 import "./SavedAlbums.css";
+import { useOutletContext } from "react-router-dom";
 
 
 const albums = [
@@ -32,6 +33,10 @@ const albums = [
 ];
 
 function SavedAlbums() {
+
+const { songs, setSongs, search, setSearch } = useOutletContext();
+
+
   return (
     <>
     <div className="dashboard-container">
@@ -39,7 +44,7 @@ function SavedAlbums() {
 
       <div className="albums-page">
 
-        <SNavbar />
+        
 
         {/* HERO */}
         <div className="albums-hero">

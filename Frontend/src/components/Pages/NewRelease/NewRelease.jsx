@@ -2,6 +2,7 @@ import SNavbar from "../../DashNavBar/sNavbar";
 import Footer from "../../Dashboard/Footer/Footer";
 import "../Home/dashboard.css";
 import "./NewRelease.css";
+import { useOutletContext } from "react-router-dom";
 
 const releases = [
   {
@@ -43,6 +44,10 @@ const releases = [
 ];
 
 function NewRelease() {
+
+const { songs, setSongs, search, setSearch } = useOutletContext();
+
+
   return (
     <>
       <div className="dashboard-container">
@@ -50,7 +55,7 @@ function NewRelease() {
 
       <div className="newrelease-page">
 
-        <SNavbar />
+        
 
         {/* HERO */}
         <div className="newrelease-hero">

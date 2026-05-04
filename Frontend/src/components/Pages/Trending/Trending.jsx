@@ -2,15 +2,82 @@ import SNavbar from "../../DashNavBar/sNavbar";
 import Footer from "../../Dashboard/Footer/Footer";
 import "../Home/dashboard.css";
 import "./Trending.css";
+import { useOutletContext } from "react-router-dom";
 
 function Trending() {
+
+const { songs, setSongs, search, setSearch, setCurrentSong, currentSong } = useOutletContext();
+const safeSongs = songs || [];
+
+const trendingSongs = safeSongs.slice(0, 6);
+
+{/**********-BREAKOUT-ARTISTS-*********** */}
+const breakoutArtists = Object.values(
+  safeSongs.reduce((acc, song) => {
+    if (!acc[song.artist]) {
+      acc[song.artist] = {
+        name: song.artist,
+        count: 0,
+        cover: song.coverImage,
+      };
+    }
+    acc[song.artist].count += 1;
+    return acc;
+  }, {})
+)
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 6);
+
+  const handleArtistClick = (artistName) => {
+  const artistSongs = safeSongs.filter(
+    (song) => song.artist === artistName
+  );
+
+  if (artistSongs.length > 0) {
+    setSongs(artistSongs);          // update queue
+    setCurrentSong(artistSongs[0]); // play first song
+  }
+};
+
+{/**********-TRENDING-GENRES-*********** */}
+  const trendingGenres = Object.values(
+  safeSongs.reduce((acc, song) => {
+    const genre = song.genre || "Other";
+
+    if (!acc[genre]) {
+      acc[genre] = {
+        name: genre,
+        count: 0,
+      };
+    }
+
+    acc[genre].count += 1;
+    return acc;
+  }, {})
+)
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 6);
+
+  const handleGenreClick = (genreName) => {
+  const filtered = songs.filter(
+    (song) =>
+      song.genre?.toLowerCase() === genreName.toLowerCase()
+  );
+
+  if (filtered.length > 0) {
+    setSongs(filtered);
+    setCurrentSong(filtered[0]);
+  }
+};
+
+
   return (
     <>
     <div className="dashboard-container">
     
     
     <div className="trending-page">
-      <SNavbar/>
+     
 
       {/* HERO */}
       <div className="trending-hero">
@@ -29,31 +96,57 @@ function Trending() {
       <div className="section">
         <h2>🔥 Trending Now</h2>
 
-        <div className="cards">
-          {[1,2,3].map((item, i) => (
-            <div className="trend-card" key={i}>
+        <div className="cards" >
+          {trendingSongs.map((song, i) => (
+            <div className="trend-card"  onClick={() => setCurrentSong(song)} key={i}>
               <span className="rank">{i+1}</span>
               <span className="growth">+{200 - i*30}%</span>
 
-              <img src={`/images/trends.jpg`} />
+              <div 
+                className="image-wrapper"
+                onClick={() => setCurrentSong(song)}
+              >
+                 <img src={`http://localhost:3000/${song.coverImage}`} />
 
-              <div className="card-content">
-                <p className="genre">Pop</p>
-                <h3>Summer Heat</h3>
-                <p className="artist">Tropical Waves</p>
+                    <div className="overlay">
+                      <button
+                        className="play-btn"
+                        onClick={(e) => {
+                        e.stopPropagation();
+                        if (currentSong?._id === song._id) {
+                        // same song → toggle play/pause handled in MainLayout
+                        } else {
+                                setCurrentSong(song);
+                          }
+                        }}
+                      >
+                        {currentSong?._id === song._id ? "⏸" : "▶"}
+                      
+                      </button>
+                    </div>
+                </div>
 
+              <div className="card-content" onClick={() => setCurrentSong(song)} >
+                <p className="genre">{song.genre || "Music"}</p>
+                <h3>{song.title}</h3>
+                <p className="artist">{song.artist}</p>
                 <div className="plays">
                   <span>4.3M plays</span>
-                  <div className="bar"></div>
                 </div>
               </div>
 
               <div className="card-actions">
-                <button className="play-btn">▶ Play</button>
+                <button
+                  className="play-btn"
+                  onClick={() => setCurrentSong(song)}
+                  >
+                    PLAY
+                </button>
                 <button>♡</button>
                 <button>↗</button>
               </div>
             </div>
+            
           ))}
         </div>
       </div>
@@ -66,20 +159,26 @@ function Trending() {
         </div>
 
         <div className="cards">
-          {["Neon Dreams","Velvet Sky","Bass Prophet","Lunar Echo"].map((name,i)=>(
-            <div className="artist-card" key={i}>
-              <span className="growth">+{300 - i*50}%</span>
-              <img src={`/images/artist${i+1}.jpg`} />
+          {breakoutArtists.map((artist, i) => (
+          <div className="artist-card" 
+          key={i}
+          onClick={() => handleArtistClick(artist.name)}>
+            <span className="growth">+{300 - i * 50}%</span>
+            <img src={`http://localhost:3000/${artist.cover}`} />
+            <h3>{artist.name}</h3>
+            
 
-              <h3>{name}</h3>
-              <p>Genre</p>
-
-              <div className="artist-footer">
-                <span>2.1M</span>
-                <button>+ Follow</button>
-              </div>
+            <div className="artist-footer">
+              <p>{artist.count} songs</p>
+              <span>{(artist.count * 0.5).toFixed(1)}M</span>
+              <button
+                onClick={(e) => e.stopPropagation()}
+              >
+                + Follow
+              </button>
             </div>
-          ))}
+          </div>
+        ))}
         </div>
       </div>
 
@@ -88,11 +187,18 @@ function Trending() {
         <h2>Trending Genres</h2>
 
         <div className="genre-grid">
-          {["Hyperpop","Afrobeats","Lo-fi Hip Hop","K-Pop","Latin Trap","Bedroom Pop"].map((g,i)=>(
-            <div className="genre-card" key={i}>
-              <div className="icon"></div>
-              <h3>{g}</h3>
-              <p>10K tracks</p>
+          {trendingGenres.map((genre, i) => (
+          <div className="genre-card" 
+          key={i}
+          onClick={() => handleGenreClick(genre.name)}
+        >
+            <div className="icon"></div>
+
+              <h3
+              onClick={() => handleGenreClick(genre)}
+              >{genre.name}</h3>
+              <p>{genre.count} tracks</p>
+
               <span className="growth">+150%</span>
             </div>
           ))}

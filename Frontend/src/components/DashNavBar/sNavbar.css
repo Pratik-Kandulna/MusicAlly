@@ -83,25 +83,30 @@
   padding: 0px;
   border-radius: 10px;
   width: 200px;
+  
   box-shadow: 0 10px 20px rgba(0,0,0,0.1);
   
+  
 
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(200px);
-  -webkit-backdrop-filter: blur(200px); /* Safari */
+  background:linear-gradient(120deg, rgba(131, 203, 255, 0.3) ,  rgb(203, 131, 255, 0.3));
+  backdrop-filter: blur(1200px);
+  -webkit-backdrop-filter: blur(1200px); /* Safari */
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   z-index: 1000;
 }
 
-.sdropdown-menu p {
+.sdropdown-menu a {
+
   display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #272626;
+  padding: 10px 12px;
+  margin: 0;
+  align-items: center;   /* 🔥 vertical center */
+  justify-content: center; 
+
   
   margin: 0%;
-  padding: 2px;
+  padding-left: 5px;
   cursor: pointer;
   border:0.1px solid #FFFFFF4A ;
   border-radius: 9px;
@@ -110,7 +115,7 @@
   z-index: 1000;
 }
 
-.sdropdown-menu p:hover {
+.sdropdown-menu a:hover {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px); /* Safari */

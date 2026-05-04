@@ -8,11 +8,18 @@ import Recommended from "../../Recommended/Recommended";
 import Footer from "../../Dashboard/Footer/Footer";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 import "./dashboard.css";
 
 import { useRef, useState, useEffect } from "react";
 
-function Dashboard({ songs, setSongs, search, setSearch,}) {
+
+function Dashboard() {
+
+const { songs, setSongs, search, setSearch, currentSong, setCurrentSong, setIsPlaying } = useOutletContext();
+const [deletingId, setDeletingId] = useState(null);
+const [currentIndex, setCurrentIndex] = useState(0);
+
 
 {/****************-UseNavigate-**************/}
   const navigate = useNavigate();
@@ -22,55 +29,14 @@ function Dashboard({ songs, setSongs, search, setSearch,}) {
 
 
     {/***********-SONGS-FILTER-***********/}
-
-    
-  const filteredSongs = (songs || []).filter(song => {
-  const title = song.title?.toLowerCase() || "";
-  const artist = song.artist?.toLowerCase() || "";
-  const query = search?.toLowerCase() || "";
-
-  if (!query) return true;
-
-  return title.includes(query) || artist.includes(query);
-});
-
   const [recentSongs, setRecentSongs] = useState([]);
-  const [currentSong, setCurrentSong] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const audioRef = useRef(null);
+  const safeSongs = songs || [];
 
-  const togglePlay = () => {
+console.log("Clicked song:", currentSong);
 
-  if (!audioRef.current) return;
-  if (isPlaying) {
-    audioRef.current.pause();
-  } else {
-    audioRef.current.play();
-  }
-  setIsPlaying(prev => !prev);
-};
 
-const playNext = () => {
-  const currentIndex = filteredSongs.findIndex(s => s._id === currentSong._id);
-  const nextSong = filteredSongs[currentIndex + 1];
-  if (nextSong) setCurrentSong(nextSong);
-};
 
-const playPrev = () => {
-  const currentIndex = filteredSongs.findIndex(s => s._id === currentSong._id);
-  const prevSong = filteredSongs[currentIndex - 1];
-  if (prevSong) setCurrentSong(prevSong);
-};
-console.log(currentIndex, currentSong?.title);
 
-const [progress, setProgress] = useState(0);
-
-const formatTime = (time) => {
-  const minutes = Math.floor(time / 60);
-  const seconds = Math.floor(time % 60);
-  return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-};
 
         {/**************-ROLE-DATA-****************/}
   const role = localStorage.getItem("role");
@@ -78,21 +44,32 @@ const formatTime = (time) => {
 
         {/******************-DELETE-FUNCTION-*********************/}
   const deleteSong = async (id) => {
+  const confirmDelete = window.confirm("Are you sure you want to delete this song?");
+  if (!confirmDelete) return;
+
   try {
-    await fetch(`http://localhost:3000/api/songs/${id}`, {
+    setDeletingId(id); // 🔥 lock this button
+
+    const res = await fetch(`http://localhost:3000/api/songs/${id}`, {
       method: "DELETE",
     });
 
-    // instead of reload
-    const res = await fetch("http://localhost:3000/api/songs");
-    const data = await res.json();
-    setSongs(data);
-    console.log("Deleted!");
+    if (!res.ok) throw new Error("Delete failed");
+
+    // update UI instantly
+    setSongs((prev) => prev.filter((song) => song._id !== id));
+
+    // if deleted song is currently playing
+    if (currentSong?._id === id) {
+      setCurrentSong(null);
+      setIsPlaying(false);
+    }
 
   } catch (err) {
-    console.log(err);
-    console.log("Delete Failed!");
-    
+    console.error(err);
+    alert("Delete failed!");
+  } finally {
+    setDeletingId(null); // 🔓 unlock
   }
 };
 
@@ -100,25 +77,7 @@ const formatTime = (time) => {
   
 
 
-useEffect(() => {
-  if (audioRef.current && currentSong) {
-    audioRef.current.play();
-    setIsPlaying(true);
-  }
-}, [currentSong]);
 
-
-useEffect(() => {
-  const audio = audioRef.current;
-  if (!audio) return;
-
-  const interval = setInterval(() => {
-    setProgress(audio.currentTime);
-  }, 300); // smoother
-
-  return () => clearInterval(interval);
-  
-}, [currentSong]);
 
 
       {/***************-ROLE-CHECK-FUNCTION-*********************/}
@@ -130,33 +89,10 @@ useEffect(() => {
   }
 }, []);
 
-  console.log("songs:", filteredSongs);
+  console.log("songs:", songs);
 
 
-  useEffect(() => {
-  fetch("http://localhost:3000/api/songs")
-    .then(res => res.json())
-    .then(data => setSongs(data));
-}, []);
 
-
-useEffect(() => {
-  if (location.state?.refresh) {
-    fetch("http://localhost:3000/api/songs")
-      .then(res => res.json())
-      .then(data => {
-        setSongs(data);   // IMPORTANT
-      });
-  }
-}, [location.state]);
-
-
-useEffect(() => {
-  if (audioRef.current && currentSong) {
-    audioRef.current.load();   // reload new song
-    audioRef.current.play();   // start playing
-  }
-}, [currentSong]);
 
 
 useEffect(() => {
@@ -169,7 +105,6 @@ useEffect(() => {
 
     return [currentSong, ...filtered].slice(0, 10);
   });
-
 }, [currentSong]);
 
 
@@ -181,28 +116,21 @@ useEffect(() => {
 
 // SAVE when updated
 useEffect(() => {
-  localStorage.setItem("recentSongs", JSON.stringify(recentSongs));
+  localStorage.setItem("recentSongs", JSON.stringify(songs));
 }, [recentSongs]);
 
 console.log("Search:", search);
 console.log("Songs:", songs.length);
-console.log("Filtered:", filteredSongs.length);
+console.log("Filtered:", songs.length);
 
 
   return (
   <>
-    <div className="dashboard-container">
-
-      <SNavbar search={search}
-        setSearch={setSearch}
-        songs={songs}
-        setCurrentSong={setCurrentSong}
-      />
       <Welcome />
       <QuickCards />
       <RecentlyPlayed 
         songs={recentSongs} 
-        filteredSongs={filteredSongs}
+        filteredSongssongs={songs}
         setCurrentSong={setCurrentSong}
         setCurrentIndex={setCurrentIndex} 
         currentSong={currentSong}
@@ -236,6 +164,7 @@ console.log("Filtered:", filteredSongs.length);
       <div className="AllSongs-Card"
         key={song._id}
         onClick={() => {
+          console.log("CLICKED:", song);
           setCurrentSong(song);
           setIsPlaying(true);
         }}
@@ -245,10 +174,19 @@ console.log("Filtered:", filteredSongs.length);
           width="120"
         />
         <p>{song.title} - {song.artist}</p> 
-        {/* DELETE-BUTTON */}
-        <button onClick={() => deleteSong(song._id)}>
-          Delete
-        </button>
+
+        {/******** DELETE-BUTTON ************/}
+        <button
+          onClick={() => deleteSong(song._id)}
+          disabled={deletingId === song._id}
+          style={{
+          opacity: deletingId === song._id ? 0.5 : 1,
+          cursor: deletingId === song._id ? "not-allowed" : "pointer"
+  }}
+>
+  {deletingId === song._id ? "Deleting..." : "Delete"}
+</button>
+
       </div>
     ))}
   </div>
@@ -256,69 +194,10 @@ console.log("Filtered:", filteredSongs.length);
 )}
 
       <Footer />
-    </div>
+    
 
-    {/* ✅ PLAYER INSIDE SAME RETURN */}
-    {currentSong && (
-      <div  className="Player">
-        {/* LEFT */}
-
-  <div style={{ display: "flex", alignItems: "center", gap: "10px", width: "25%" }}>
-    <img
-      src={`http://localhost:3000/${currentSong.coverImage}`}
-      width="50px"
-      height="50px"
-      style={{ borderRadius: "5px" }}
-    />
-
-    <div>
-      <p>{currentSong.title}</p>
-      <small>{currentSong.artist}</small>
-    </div>
-  </div>
-
-  {/* CENTER */}
-
-<div style={{ width: "40%", textAlign: "center" }}>
-  <input
-    type="range"
-    min="0"
-    max={audioRef.current?.duration || 0}
-    value={progress}
-    onChange={(e) => {
-      const value = e.target.value;
-      audioRef.current.currentTime = value;
-      setProgress(value);
-    }}
-    style={{ width: "100%" }}
-  />
-
-  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "12px" }}>
-    <span>{formatTime(progress)}</span>
-    <span>
-  {formatTime(audioRef.current?.duration || currentSong?.duration || 0)}
-</span>
-  </div>
-</div>
-
-  {/* RIGHT */}
-
-    <div style={{ width: "25%", display: "flex", justifyContent: "flex-end", gap: "10px",  }}>
-    <button onClick={playPrev}>⏮</button>
-    <button onClick={togglePlay}>
-      {isPlaying ? "⏸" : "▶"}
-    </button>
-    <button onClick={playNext}>⏭</button>
-  </div>
-
-    <audio
-      ref={audioRef}
-      src={`http://localhost:3000/${currentSong?.audioUrl}`}
-      autoPlay
-      onEnded={playNext}
-    />
-      </div>
-    )}
+    
+    
   </>
 );
 }

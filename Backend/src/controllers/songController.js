@@ -1,7 +1,7 @@
 import Song from "../models/songModel.js";
 export const createSong = async (req, res) => {
   try {
-    const { title, artist } = req.body;
+    const { title, artist, genre, album } = req.body;
 
 
         {/**********-EXISTING-SONG-CHECK-************/}
@@ -16,12 +16,14 @@ export const createSong = async (req, res) => {
 
         {/**************-SONG-CREATE-**************/}
     const song = await Song.create({
-      title,
-      artist,
-      audioUrl: req.files?.audio?.[0]?.path,
-      coverImage: req.files?.cover?.[0]?.path,
-    });
+    title,
+    artist,
+    genre: genre?.toLowerCase() || "unknown",
+    album: album || null,
 
+  audioUrl: req.files?.audio?.[0]?.path,
+  coverImage: req.files?.cover?.[0]?.path,
+});
     res.status(201).json(song);
 
   } catch (error) {

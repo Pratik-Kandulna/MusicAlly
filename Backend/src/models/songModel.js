@@ -14,12 +14,13 @@ const songSchema = new mongoose.Schema(
 
     album: {
       type: String,
-      default: "",
+      default: null,
     },
 
     genre: {
       type: String,
       default: "",
+      required: true,
     },
 
     coverImage: {

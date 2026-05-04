@@ -2,9 +2,15 @@ import "./sNavbar.css";
 import { useState, useRef, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 
 
-function SNavbar({ search, setSearch, songs, setCurrentSong }) {
+
+
+
+function SNavbar({ setCurrentSong, songs, search, setSearch }) {
+
+  
 
   const searchRef = useRef(null);
   const [activeMenu, setActiveMenu] = useState(null);
@@ -13,6 +19,12 @@ function SNavbar({ search, setSearch, songs, setCurrentSong }) {
   const toggleMenu = (menu) => {
     setActiveMenu((prev) => (prev === menu ? null : menu));
   };
+
+  const location = useLocation();
+  useEffect(() => {
+  setActiveMenu(null); // close dropdown on page change
+
+}, [location]);
 
   // ✅ FIXED: inside component
   useEffect(() => {
@@ -23,7 +35,7 @@ function SNavbar({ search, setSearch, songs, setCurrentSong }) {
 
      // 🔥 close search dropdown
      if (searchRef.current && !searchRef.current.contains(e.target)) {
-      setSearch(""); // clears input → dropdown disappears
+      
     }
     };
 
@@ -34,18 +46,15 @@ function SNavbar({ search, setSearch, songs, setCurrentSong }) {
   }, []);
 
 {/**************-FILTER-SONGS-***************/}
+  const filteredSongs = (songs || []).filter(song => {
+  const title = song.title?.toLowerCase?.() || "";
+  const artist = song.artist?.toLowerCase?.() || "";
+  const query = search?.toLowerCase() || "";
 
-  const filteredSongs = Array.isArray(songs)
-  ? songs.filter(song => {
-      const title = song.title?.toLowerCase() || "";
-      const artist = song.artist?.toLowerCase() || "";
-      const query = search?.toLowerCase() || "";
+  if (!query.trim()) return false;
 
-      if (!query) return false;
-
-      return title.includes(query) || artist.includes(query);
-    })
-  : [];
+  return title.includes(query) || artist.includes(query);
+});
 
 
 
@@ -61,57 +70,68 @@ function SNavbar({ search, setSearch, songs, setCurrentSong }) {
 
         {/* CENTER */}
         <ul className="snav-links">
-          <NavLink to="/Dashboard">
-          <li>Home</li>
-          </NavLink>
+          <li>
 
-          <li className="sdropdown" onClick={() => toggleMenu("discover")}>
-            Discover ▾
-            {activeMenu === "discover" && (
-              <div className="sdropdown-menu" onClick={(e) => e.stopPropagation()}>
-                <NavLink to="/Trending">
-                <p>Trending Now</p>
-                </NavLink>
+    <NavLink to="/Dashboard">Home</NavLink>
 
-                
-                <NavLink to="/NewRelease">
-                <p>New Releases</p>
-                </NavLink>
-                
-                <NavLink to="/TopCharts">
-                <p>Top Charts</p>
-                </NavLink>
-                
-                <NavLink to="/AllGenres">
-                <p>Browse All Genres</p>
-                </NavLink>
-              </div>
-            )}
-          </li>
+  </li>
+
+  <li className="sdropdown" onClick={() => toggleMenu("discover")}>
+
+    Discover
+
+    {activeMenu === "discover" && (
+
+      <div className="sdropdown-menu" onClick={(e) => e.stopPropagation()}>
+
+        <NavLink to="/Trending" onClick={(e) => e.stopPropagation()}>
+               Trending Now
+        </NavLink>
+        <NavLink to="/NewRelease" onClick={(e) => e.stopPropagation()}>
+  New Releases
+</NavLink>
+<NavLink to="/TopCharts" onClick={(e) => e.stopPropagation()}>
+  Top Charts
+</NavLink>
+<NavLink to="/AllGenres" onClick={(e) => e.stopPropagation()}>
+  Browse All Genres
+</NavLink>
+
+      </div>
+
+    )}
+
+  </li>
+
+  <li className="browse">
+
+    <NavLink to="/Browse">
+
+      <FaSearch />
+
+      Browse
+
+    </NavLink>
+
+  </li>
           
-          <NavLink to="/Browse"> 
-          <li className="browse">
-           <FaSearch/>
-           Browse
-           </li>
-          </NavLink>
 
           <li className="sdropdown" onClick={() => toggleMenu("collections")}>
             Collections ▾
             {activeMenu === "collections" && (
               <div className="sdropdown-menu">
                 <NavLink to="/MyFavourites">
-                <p>My Favorites</p>
+                My Favorites
                 </NavLink>
                 
                 <NavLink to="/MyPlaylists">
-                <p>My Playlists</p>
+                My Playlists
                 </NavLink>
                 
                 
 
                 <NavLink to="/SavedAlbums">
-                <p>Saved Albums</p>
+                Saved Albums
                 </NavLink>
                 
               </div>
@@ -147,9 +167,9 @@ function SNavbar({ search, setSearch, songs, setCurrentSong }) {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}        
             />
-            {search && (
+            {search?.trim() && (
             <div className="search-dropdown">
-              {filteredSongs && filteredSongs.length > 0 ? (
+              {filteredSongs.length > 0 ? (
                 filteredSongs.slice(0, 5).map((song, index) => (
                 <div
                   key={song._id}
@@ -157,6 +177,7 @@ function SNavbar({ search, setSearch, songs, setCurrentSong }) {
                   onClick={() => {
                     setCurrentSong(song);
                     setSearch(""); // close dropdown
+                    setActiveMenu(null); // close dropdowns also
                   }}
                 >
             <img
@@ -170,7 +191,9 @@ function SNavbar({ search, setSearch, songs, setCurrentSong }) {
           </div>
         ))
       ) : (
-        <p className="no-result">No results</p>
+        search?.trim() && filteredSongs.length === 0 && (
+          <p className="no-result">No results</p>
+        )
       )}
     </div>
   )}

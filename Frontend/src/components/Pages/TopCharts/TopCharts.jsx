@@ -2,6 +2,7 @@ import SNavbar from "../../DashNavBar/sNavbar";
 import Footer from "../../Dashboard/Footer/Footer";
 import "../Home/dashboard.css";
 import "./TopCharts.css";
+import { useOutletContext } from "react-router-dom";
 
 const charts = [
   {
@@ -42,6 +43,10 @@ const charts = [
 ];
 
 function TopCharts() {
+
+const { songs, setSongs, search, setSearch } = useOutletContext();
+
+
   return (
     <>
       
@@ -49,7 +54,7 @@ function TopCharts() {
 
       <div className="topcharts-page">
 
-        <SNavbar />
+        
 
         {/* HERO */}
         <div className="topcharts-hero">

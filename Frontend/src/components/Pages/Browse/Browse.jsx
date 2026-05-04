@@ -2,6 +2,7 @@ import SNavbar from "../../DashNavBar/sNavbar";
 import Footer from "../../Dashboard/Footer/Footer";
 import "../Home/dashboard.css";
 import "./Browse.css";
+import { useOutletContext } from "react-router-dom";
 
 const categories = [
   { name: "Pop", color: "#ff4d8d" },
@@ -30,6 +31,10 @@ const artists = [
 ];
 
 function Browse() {
+
+const { songs, setSongs, search, setSearch } = useOutletContext();
+
+
   return (
     <>
     
@@ -39,7 +44,7 @@ function Browse() {
 
       <div className="browse-page">
 
-        <SNavbar />
+        
 
         {/* HERO */}
         <div className="browse-hero">

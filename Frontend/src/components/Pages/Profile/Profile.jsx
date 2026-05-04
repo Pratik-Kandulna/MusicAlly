@@ -2,15 +2,20 @@ import "./Profile.css";
 import "../Home/dashboard.css";
 import Footer from "../../Dashboard/Footer/Footer";
 import SNavbar from "../../DashNavBar/sNavbar";
+import { useOutletContext } from "react-router-dom";
 
 function Profile() {
+
+const { songs, setSongs, search, setSearch } = useOutletContext();
+
+
   return (
     <>
      <div className="dashboard-container">
       
       <div className="profile-page">
 
-        <SNavbar />
+        
 
         {/* HEADER */}
         <div className="profile-header">
