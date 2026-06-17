@@ -26,9 +26,11 @@ function Login() {
     );
 
     console.log(res.data);
+    console.log("Login response:", res.data);
 
     localStorage.setItem("token", res.data.token);
     localStorage.setItem("user", JSON.stringify(res.data));
+    
 
     alert("Login successful!");
 

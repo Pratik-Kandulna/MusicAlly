@@ -1,33 +1,61 @@
 import "./MyPlaylists.css";
 import SNavbar from "../../DashNavBar/sNavbar";
 import Footer from "../../Dashboard/Footer/Footer";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import "../Home/dashboard.css";
 
-
-const playlists = [
-  {
-    title: "Chill Vibes",
-    tracks: "24 tracks",
-    img: "/images/trends.jpg",
-  },
-  {
-    title: "Workout Hits",
-    tracks: "18 tracks",
-    img: "/images/trends.jpg",
-  },
-  {
-    title: "Late Night",
-    tracks: "32 tracks",
-    img: "/images/trends.jpg",
-  },
-  {
-    title: "Road Trip",
-    tracks: "20 tracks",
-    img: "/images/trends.jpg",
-  },
-];
-
 function Playlists() {
+
+const [playlists, setPlaylists] = useState([]);
+
+const createPlaylist = async (name) => {
+  if (!name.trim()) return;
+
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    
+    // 🔍 Debug logs
+
+    console.log("Playlist name:", name);
+    console.log("User object:", user);
+    console.log("User ID:", user?._id || user?.id);
+    const res = await axios.post(
+      "http://localhost:3000/api/playlists/create",
+      {
+        name: name,
+        userId: user._id || user.id,
+      }
+    );
+
+    setPlaylists((prev) => [...prev, res.data]);
+  } catch (err) {
+    console.log("Status:", err.response?.status);
+    console.log("Server response:", err.response?.data);
+    console.error(err);
+  }
+};
+
+useEffect(() => {
+  const fetchPlaylists = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+
+      console.log("User from localStorage:", user);
+      console.log("user._id:", user?._id || user?.id);
+      console.log("user.id:", user?._id || user?.id);
+      const res = await axios.get(
+        `http://localhost:3000/api/playlists/${user._id || user.id}`
+      );
+
+      setPlaylists(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchPlaylists();
+}, []);
   return (
     <>
       <div className="dashboard-container">
@@ -44,7 +72,17 @@ function Playlists() {
         <div className="playlist-section">
           <div className="playlist-header">
             <h2>🎧 Your Collections</h2>
-            <button className="create-btn">+ Create Playlist</button>
+            <button
+              className="create-btn"
+              onClick={() => {
+                const name = prompt("Enter playlist name");
+                if (name) {
+                  createPlaylist(name);
+                }
+              }}
+            >
+              + Create Playlist
+            </button>
           </div>
 
           {/* GRID */}
@@ -54,8 +92,8 @@ function Playlists() {
                 <img src={item.img} alt="" />
 
                 <div className="playlist-info">
-                  <h3>{item.title}</h3>
-                  <p>{item.tracks}</p>
+                  <h3>{item.name}</h3>
+                  <p>{item.songs.length} songs</p>
                 </div>
               </div>
             ))}
