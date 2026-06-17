@@ -2,16 +2,43 @@ import "./Login.css";
 import { FaUser, FaEnvelope, FaLock, FaGoogle, FaFacebookF, FaTwitter } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import axios from "axios";
 
 function Login() {
 
   const navigate = useNavigate();
   const [role, setRole] = useState("user");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleLogin = (e) => {
+
+  const handleLogin = async (e) => {
   e.preventDefault();
-  localStorage.setItem("role", role);
-  navigate("/Dashboard");
+
+  try {
+    const res = await axios.post(
+      "http://localhost:3000/api/auth/login",
+      {
+        email,
+        password,
+      }
+    );
+
+    console.log(res.data);
+
+    localStorage.setItem("token", res.data.token);
+    localStorage.setItem("user", JSON.stringify(res.data));
+
+    alert("Login successful!");
+
+    navigate("/Dashboard");
+
+
+  } catch (err) {
+    console.log(err);
+    alert("Login failed");
+  }
 };
 
 
@@ -88,19 +115,25 @@ function Login() {
               </div>
             </div>
 
-            <div className="input-box">
-              <FaUser />
-              <input type="text" placeholder="Full Name" />
-            </div>
 
             <div className="input-box">
               <FaEnvelope />
-              <input type="email" placeholder="Email" />
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
 
             <div className="input-box">
               <FaLock />
-              <input type="password" placeholder="Password" />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
 
             <div className="terms">

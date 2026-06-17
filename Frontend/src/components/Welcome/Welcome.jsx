@@ -2,6 +2,10 @@ import ".././Pages/Home/dashboard.css";
 import "./Welcome.css";
 
 function Welcome() {
+
+  const user = JSON.parse(localStorage.getItem("user"));
+
+
   return (
     <div className="welcome">
       <div className="welcome-content">
@@ -9,7 +13,7 @@ function Welcome() {
         {/* LEFT TEXT */}
         <div className="welcome-left">
           <h1>
-            Welcome back, Alex! 👋
+            Welcome back, {user?.name}! 👋
           </h1>
           <p>Ready to discover new music today?</p>
         </div>

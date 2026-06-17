@@ -83,6 +83,12 @@
   padding: 0px;
   border-radius: 10px;
   width: 200px;
+  list-style: none;
+  font-weight:bolder;
+  font-family: sans-serif;
+  cursor: pointer;
+  
+  
   
   box-shadow: 0 10px 20px rgba(0,0,0,0.1);
   
@@ -182,6 +188,7 @@
   flex-shrink: 0;
   width: 55px;
   height: 55px;
+  
 
   border-radius: 10px;
   cursor:pointer;

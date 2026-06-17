@@ -1,6 +1,53 @@
 import "./RecentlyPlayed.css";
+import { FaFileImport } from "react-icons/fa";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import axios from "axios";
 
-function RecentlyPlayed({ songs, setCurrentSong, setCurrentIndex, currentSong }) {
+function RecentlyPlayed({ songs, setCurrentSong, setCurrentIndex, currentSong, currentUser, likedSongs=[], setLikedSongs }) {
+  console.log("currentUser in RecentlyPlayed:", currentUser);
+  
+  const handleLike = async (songId) => {
+  console.log("❤️ handleLike called:", songId);
+
+  const loggedInUser =
+    currentUser || JSON.parse(localStorage.getItem("user"));
+
+  if (!loggedInUser) return;
+
+  const isLiked = (likedSongs || []).some(
+  id => String(id) === String(songId)
+);
+
+  try {
+    if (isLiked) {
+      await axios.post("http://localhost:3000/api/auth/unlike", {
+        userId: loggedInUser._id || loggedInUser.id,
+        songId,
+      });
+
+      setLikedSongs((prev) =>
+  prev.filter((id) => String(id) !== String(songId))
+);
+    } else {
+      await axios.post("http://localhost:3000/api/auth/like", {
+        userId: loggedInUser._id || loggedInUser.id,
+        songId,
+      });
+
+      setLikedSongs((prev) => {
+  const next = [...prev, songId];
+  console.log("NEW likedSongs:", next);
+  return next;
+});
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+  
+
+  
+
   return (
     <div className="recent-section">
       
@@ -16,6 +63,7 @@ function RecentlyPlayed({ songs, setCurrentSong, setCurrentIndex, currentSong })
             className={`song-card ${
               currentSong?._id === song._id ? "active" : ""}`}
             onClick={() => {
+              console.log("🎵 Card clicked");
               setCurrentSong(song);
               setCurrentIndex(index);
             }}
@@ -33,14 +81,42 @@ function RecentlyPlayed({ songs, setCurrentSong, setCurrentIndex, currentSong })
                 onClick={(e) => {
                   e.stopPropagation();
                   setCurrentSong(song);
+                  setCurrentIndex(index);
                 }}
               >
                 ▶
               </div>
             </div>
+            
 
-            <h4>{song.title}</h4>
+            <h4>
+              
+              <div className="like-button">
+                {song.title}
+                
+              { (likedSongs || []).some((id) => String(id) === String(song._id)) ? (
+                <FaHeart
+                  color="red"
+                  style={{ cursor: "pointer" }}
+                  onClick={(e) =>{ 
+                    e.stopPropagation();
+                    handleLike(song._id);
+                  }}
+                />
+              ) : (
+              <FaRegHeart
+                style={{ cursor: "pointer" }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleLike(song._id);
+                }}
+                />
+              )}
+            </div>
+              
+            </h4>
             <p>{song.artist}</p>
+            
 
           </div>
 
@@ -49,6 +125,7 @@ function RecentlyPlayed({ songs, setCurrentSong, setCurrentIndex, currentSong })
     </div>
   );
 }
+
 
 export default RecentlyPlayed;
   

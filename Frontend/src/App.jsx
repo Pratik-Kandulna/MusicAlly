@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
-
+import axios from "axios";
 import Home from "./components/Pages/Home/Home";
 import Login from "./components/Pages/Login/Login";
 import Trending from "./components/Pages/Trending/Trending";
@@ -16,13 +16,16 @@ import Profile from "./components/Pages/Profile/Profile";
 import CreateAcc from "./components/Pages/Login/CreateAcc";
 import Upload from "./components/Pages/Upload/Upload";
 import MainLayout from "./components/MainLayout/MainLayout";
-
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
 
   const [search, setSearch] = useState("");
   const [songs, setSongs] = useState([]);
+  const [likedSongs, setLikedSongs] = useState([]);
+  const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
   const [currentSong, setCurrentSong] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
 
   const [loading, setLoading] = useState(true);
@@ -49,6 +52,18 @@ function App() {
     return title.includes(query) || artist.includes(query);
   });
 
+  useEffect(() => {
+  if (!currentUser) return;
+
+  axios
+    .get(`http://localhost:3000/api/auth/favourites/${currentUser.id}`)
+    .then((res) => {
+      // Store only song IDs
+      setLikedSongs(res.data.map((song) => song._id));
+    })
+    .catch(console.error);
+}, [currentUser]);
+
 
   return (
     <>   
@@ -64,26 +79,129 @@ function App() {
     element={
       <MainLayout
         songs={songs}
+        currentUser={currentUser}
         setSongs={setSongs}
         search={search}
         setSearch={setSearch}
         currentSong={currentSong}
         setCurrentSong={setCurrentSong}
+        likedSongs={likedSongs}
+        setLikedSongs={setLikedSongs}
       />
     }
   >
     
-    <Route path="/Dashboard" element={<Dashboard />} />
-    <Route path="/Browse" element={<Browse />} />
-    <Route path="/Trending" element={<Trending />} />
-    <Route path="/Topcharts" element={<TopCharts />} />
-    <Route path="/NewRelease" element={<NewRelease />} />
-    <Route path="/AllGenres" element={<AllGenres />} />
-    <Route path="/MyFavourites" element={<Favourites />} />
-    <Route path="/MyPlaylists" element={<Playlists />} />
-    <Route path="/SavedAlbums" element={<SavedAlbums />} />
-    <Route path="/Profile" element={<Profile />} />
-    <Route path="/Upload" element={<Upload />} />
+    <Route path="/Dashboard"element={
+    <ProtectedRoute>
+      <Dashboard 
+        currentUser={currentUser}
+        currentSong={currentSong}
+        setCurrentSong={setCurrentSong}
+        currentIndex={currentIndex}
+        setCurrentIndex={setCurrentIndex}
+      />
+    </ProtectedRoute>
+  }
+    />
+    
+    <Route
+  path="/Browse"
+  element={
+    <ProtectedRoute>
+      <Browse currentUser={currentUser} />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/Trending"
+  element={
+    <ProtectedRoute>
+      <Trending currentUser={currentUser}/>
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/TopCharts"
+  element={
+    <ProtectedRoute>
+      <TopCharts currentUser={currentUser}/>
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/NewRelease"
+  element={
+    <ProtectedRoute>
+      <NewRelease currentUser={currentUser}/>
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/AllGenres"
+  element={
+    <ProtectedRoute>
+      <AllGenres currentUser={currentUser}/>
+    </ProtectedRoute>
+  }
+  />
+
+<Route
+  path="/MyFavourites"
+  element={
+    <ProtectedRoute>
+      <Favourites 
+        songs={songs}
+        setCurrentSong={setCurrentSong}
+        setCurrentIndex={setCurrentIndex}
+        currentSong={currentSong}
+        currentUser={currentUser}
+        likedSongs={likedSongs}
+        setLikedSongs={setLikedSongs}
+      />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/MyPlaylists"
+  element={
+    <ProtectedRoute>
+      <Playlists currentUser={currentUser}/>
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/SavedAlbums"
+  element={
+    <ProtectedRoute>
+      <SavedAlbums currentUser={currentUser} />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/Profile"
+  element={
+    <ProtectedRoute>
+      <Profile currentUser={currentUser}/>
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/Upload"
+  element={
+    <ProtectedRoute>
+      <Upload />
+    </ProtectedRoute>
+  }
+/>
+   
   </Route>
 
 </Routes>

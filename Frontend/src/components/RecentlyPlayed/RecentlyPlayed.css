@@ -168,7 +168,7 @@
   transition: transform 0.3s ease;
   border-radius: 10px;
   border: 2px solid transparent;
-  padding: 2px;
+  padding: 7px;
 }
 
 .song-card:hover {
@@ -210,6 +210,7 @@
 .song-card:hover .play-btn {
   opacity: 1;
   transform: translateY(0);
+  border: none;
 }
 
 /* TEXT */
@@ -225,7 +226,7 @@
 
 .song-card.active {
   border-radius: 10px;
-  padding: 2px;
+  padding: 7px;
   align-items: center;
   justify-content: center;
   background: linear-gradient(120deg, rgb(123, 200, 255, 0.4), rgb(184, 107, 255, 0.4));
@@ -238,4 +239,14 @@
 
 .recent-scroll {
   scroll-behavior: smooth;
+}
+
+.like-button{
+  flex-direction: row;
+  justify-content: space-between;
+  width:100%;
+  padding-right:10px;
+  display:flex;
+ 
+  
 }

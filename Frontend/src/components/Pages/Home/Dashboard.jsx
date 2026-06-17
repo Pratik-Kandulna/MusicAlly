@@ -9,16 +9,16 @@ import Footer from "../../Dashboard/Footer/Footer";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
+import axios from "axios";
 import "./dashboard.css";
 
 import { useRef, useState, useEffect } from "react";
 
 
-function Dashboard() {
-
-const { songs, setSongs, search, setSearch, currentSong, setCurrentSong, setIsPlaying } = useOutletContext();
+function Dashboard({ setCurrentIndex, currentUser }) {
+console.log("Dashboard currentUser:", currentUser);
+const { songs, setSongs, search, setSearch, currentSong, setCurrentSong, setIsPlaying, likedSongs, setLikedSongs} = useOutletContext();
 const [deletingId, setDeletingId] = useState(null);
-const [currentIndex, setCurrentIndex] = useState(0);
 
 
 {/****************-UseNavigate-**************/}
@@ -31,15 +31,12 @@ const [currentIndex, setCurrentIndex] = useState(0);
     {/***********-SONGS-FILTER-***********/}
   const [recentSongs, setRecentSongs] = useState([]);
   const safeSongs = songs || [];
-
 console.log("Clicked song:", currentSong);
-
-
-
 
 
         {/**************-ROLE-DATA-****************/}
   const role = localStorage.getItem("role");
+  const user = JSON.parse(localStorage.getItem("user"));
 
 
         {/******************-DELETE-FUNCTION-*********************/}
@@ -108,6 +105,8 @@ useEffect(() => {
 }, [currentSong]);
 
 
+
+
 // LOAD once
 useEffect(() => {
   const stored = JSON.parse(localStorage.getItem("recentSongs"));
@@ -116,7 +115,10 @@ useEffect(() => {
 
 // SAVE when updated
 useEffect(() => {
-  localStorage.setItem("recentSongs", JSON.stringify(songs));
+  localStorage.setItem(
+    "recentSongs",
+    JSON.stringify(recentSongs)
+  );
 }, [recentSongs]);
 
 console.log("Search:", search);
@@ -132,6 +134,9 @@ console.log("Filtered:", songs.length);
         songs={recentSongs} 
         filteredSongssongs={songs}
         setCurrentSong={setCurrentSong}
+        currentUser={currentUser}
+        likedSongs={likedSongs}
+        setLikedSongs={setLikedSongs}
         setCurrentIndex={setCurrentIndex} 
         currentSong={currentSong}
       />
@@ -140,7 +145,7 @@ console.log("Filtered:", songs.length);
       <Recommended />
 
         {/*******************-ADMIN-PANEL-*********************/}
-      {role === "admin" && (
+      {user?.role === "admin" && (
   <div style={{ padding: "20px", background: "#222", color: "#fff" }}>
     <h3>Admin Controls</h3>
 
@@ -154,7 +159,7 @@ console.log("Filtered:", songs.length);
   </div>
 )}
 
-    {role === "admin" && (
+    {user?.role === "admin" && (
       <>
       <h2>All Songs</h2>
       

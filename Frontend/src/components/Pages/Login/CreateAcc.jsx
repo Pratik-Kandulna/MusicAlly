@@ -2,8 +2,39 @@ import "./Login.css";
 import { FaUser, FaEnvelope, FaLock, FaGoogle, FaFacebookF, FaTwitter } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import axios from "axios";
 
 function CreateAcc() {
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleRegister = async (e) => {
+  e.preventDefault();
+
+  try {
+    const res = await axios.post(
+      "http://localhost:3000/api/auth/register",
+      {
+        name,
+        email,
+        password,
+      }
+    );
+
+    console.log(res.data);
+
+    alert("Account created successfully!");
+
+    navigate("/Login");
+
+  } catch (err) {
+    console.log(err);
+    alert("Registration failed");
+  }
+};
+
 
   const navigate = useNavigate();
   const [role, setRole] = useState("user");
@@ -61,20 +92,35 @@ function CreateAcc() {
               </NavLink>
             </div>
 
-          <form>
+          <form onSubmit={handleRegister}>
             <div className="input-box">
               <FaUser />
-              <input type="text" placeholder="Full Name" />
+              <input
+                type="text"
+                placeholder="Full Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
             </div>
 
             <div className="input-box">
               <FaEnvelope />
-              <input type="email" placeholder="Email" />
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
 
             <div className="input-box">
               <FaLock />
-              <input type="password" placeholder="Password" />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
 
             <div className="terms">
@@ -85,9 +131,11 @@ function CreateAcc() {
             </div>
 
             
-            <NavLink to="/Dashboard">
-              <button className="signup-btn">Create Account</button>
-            </NavLink>
+            
+              <button className="signup-btn" type="submit">
+                Create Account
+                </button>
+            
                 
 
           

@@ -4,7 +4,16 @@ import { useState, useRef, useEffect } from "react";
 import { FaArrowDown, FaBackward, FaForward, FaIcons, FaPause, FaPlay } from "react-icons/fa";
 
 
-function MainLayout({ songs, setSongs, search, setSearch, setCurrentSong, currentSong }) {
+function MainLayout({
+  songs,
+  setSongs,
+  search,
+  setSearch,
+  setCurrentSong,
+  currentSong,
+  likedSongs,
+  setLikedSongs,
+}) {
 
   const safeSongs = songs || [];
   const [isPlaying, setIsPlaying] = useState(false);
@@ -90,7 +99,7 @@ useEffect(() => {
         setCurrentSong={setCurrentSong}
       />
 
-      <Outlet context={{ songs, safeSongs, setSongs, search, setSearch, setCurrentSong, currentSong, setIsPlaying }} />
+      <Outlet context={{ songs, safeSongs, setSongs, search, setSearch, setCurrentSong, currentSong, setIsPlaying, likedSongs, setLikedSongs }} />
 
 
       {currentSong && (

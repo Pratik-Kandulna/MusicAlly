@@ -7,6 +7,7 @@ import { useOutletContext } from "react-router-dom";
 function Profile() {
 
 const { songs, setSongs, search, setSearch } = useOutletContext();
+const user = JSON.parse(localStorage.getItem("user"));
 
 
   return (
@@ -22,9 +23,9 @@ const { songs, setSongs, search, setSearch } = useOutletContext();
           <img src="/images/user.png" alt="profile" />
 
           <div className="profile-info">
-            <h2>Pratik Kandulna</h2>
+            <h2>{user?.name}</h2>
             <p>Music Lover 🎧 | Night vibes</p>
-            <span>pratik@email.com</span>
+            <span>{user?.email}</span>
 
             <button className="edit-btn">Edit Profile</button>
           </div>

@@ -1,5 +1,6 @@
 import "./sNavbar.css";
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
@@ -11,10 +12,11 @@ import { useLocation } from "react-router-dom";
 function SNavbar({ setCurrentSong, songs, search, setSearch }) {
 
   
-
+  const navigate = useNavigate();
   const searchRef = useRef(null);
   const [activeMenu, setActiveMenu] = useState(null);
   const menuRef = useRef(null);
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const toggleMenu = (menu) => {
     setActiveMenu((prev) => (prev === menu ? null : menu));
@@ -25,6 +27,16 @@ function SNavbar({ setCurrentSong, songs, search, setSearch }) {
   setActiveMenu(null); // close dropdown on page change
 
 }, [location]);
+
+const handleLogout = () => {
+
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+
+  alert("Logged out successfully");
+
+  navigate("/Login");
+};
 
   // ✅ FIXED: inside component
   useEffect(() => {
@@ -78,7 +90,7 @@ function SNavbar({ setCurrentSong, songs, search, setSearch }) {
 
   <li className="sdropdown" onClick={() => toggleMenu("discover")}>
 
-    Discover
+    Discover ▾
 
     {activeMenu === "discover" && (
 
@@ -208,14 +220,30 @@ function SNavbar({ setCurrentSong, songs, search, setSearch }) {
           </div>
 
           
+                  
+          
+            <button className="sicon">
+            <div className="sdropdown" onClick={() => toggleMenu("profile")}>
+            <img src="/images/user.png"/>
+            {activeMenu === "profile" && (
+              <div className="sdropdown-menu">
+                <NavLink to="/profile">
+                  {user?.name}
+                </NavLink>
 
-          <div className="sicon">
-
-            <NavLink to="/Profile">
-            <img src="/images/user.png" />
-            </NavLink>
-            
+                <NavLink to="/CreateAcc">
+                 <li onClick={handleLogout}>
+                    Logout
+                  </li>
+                </NavLink>
+                
+              </div>
+            )}
           </div>
+            
+            </button>
+          
+          
             
           
           

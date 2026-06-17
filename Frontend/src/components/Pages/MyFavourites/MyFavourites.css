@@ -77,10 +77,9 @@
 
 /* BUTTON */
 .play-btn {
-  border: none;
-  padding: 10px 15px;
-  border-radius: 10px;
-  background: linear-gradient(90deg,#ff4d8d,#ff8a00);
-  color: white;
-  cursor: pointer;
+  flex-direction: row;
+  justify-content: space-between;
+  width:100%;
+  padding-right:10px;
+  display:flex;
 }
