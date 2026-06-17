@@ -1,6 +1,7 @@
 import express from "express";
 import connectDB from "./config/db.js";
 import songRoutes from "./routes/songRoutes.js";
+import authRoutes from "./routes/AuthRoutes.js";
 import cors from "cors";
 import path from "path";
 
@@ -11,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/songs", songRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/uploads", express.static(path.resolve("uploads")));
 
 // connect database
