@@ -44,12 +44,19 @@ const songSchema = new mongoose.Schema(
       default: "published",
     },
 
+    plays: {
+      type: Number,
+      default: 0,
+    },
+
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User", // later use
     },
   },
   { timestamps: true }
+
+  
 );
 
 const Song = mongoose.model("Song", songSchema);

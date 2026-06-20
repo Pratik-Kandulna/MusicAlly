@@ -55,3 +55,17 @@ export const deleteSong = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const incrementPlays = async (req, res) => {
+  try {
+    const song = await Song.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { plays: 1 } },
+      { new: true }
+    );
+
+    res.json(song);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

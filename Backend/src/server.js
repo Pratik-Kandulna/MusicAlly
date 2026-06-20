@@ -20,6 +20,8 @@ app.use("/api/playlists", playlistRoutes);
 // connect database
 connectDB();
 
+console.log("Connected DB:", process.env.MONGODB_URI);
+
 app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
 });
