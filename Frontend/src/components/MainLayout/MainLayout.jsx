@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import SNavbar from "../DashNavBar/sNavbar";
 import { useState, useRef, useEffect } from "react";
 import { FaArrowDown, FaBackward, FaForward, FaIcons, FaPause, FaPlay } from "react-icons/fa";
+import axios from "axios";
 
 
 function MainLayout({
@@ -19,6 +20,21 @@ function MainLayout({
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [currentQueue, setCurrentQueue] = useState([]);
+
+  const playSong = async (song, queue = safeSongs) => {
+  try {
+    await axios.put(
+      `http://localhost:3000/api/songs/play/${song._id}`
+    );
+  } catch (err) {
+    console.log("Failed to update plays", err);
+  }
+
+  setCurrentQueue(queue);
+  setCurrentSong(song);
+  setIsPlaying(true);
+};
 
 
   const togglePlay = () => {
@@ -35,21 +51,29 @@ function MainLayout({
 
       {/***************-PLAY-NEXT-PREVIOUS-LOGIC*****************/}
   const playNext = () => {
-    if (!currentSong) return;
-      const currentIndex = safeSongs.findIndex(s => s._id === currentSong._id);
-      const nextSong = safeSongs[currentIndex + 1];
-    if (nextSong) setCurrentSong(nextSong);
-  };
+  if (!currentSong || currentQueue.length === 0) return;
+
+  const currentIndex = currentQueue.findIndex(
+    (s) => s._id === currentSong._id
+  );
+
+  if (currentIndex !== -1 && currentIndex < currentQueue.length - 1) {
+    playSong(currentQueue[currentIndex + 1], currentQueue);
+  }
+};
   
   const playPrev = () => {
-    if (!currentSong) return;
-        const currentIndex = safeSongs.findIndex(s => s._id === currentSong._id);
-  
-    if (currentIndex > 0) {
-        const prevSong = safeSongs[currentIndex - 1];
-      setCurrentSong(prevSong);
-    }
-  };
+  if (!currentSong || currentQueue.length === 0) return;
+
+  const currentIndex = currentQueue.findIndex(
+    (s) => s._id === currentSong._id
+  );
+
+  if (currentIndex > 0) {
+    playSong(currentQueue[currentIndex - 1], currentQueue);
+  }
+};
+
   console.log( currentSong?.title);
   console.log(songs, search);
 
@@ -99,7 +123,7 @@ useEffect(() => {
         setCurrentSong={setCurrentSong}
       />
 
-      <Outlet context={{ songs, safeSongs, setSongs, search, setSearch, setCurrentSong, currentSong, setIsPlaying, likedSongs, setLikedSongs }} />
+      <Outlet context={{ songs, safeSongs, setSongs, search, setSearch, setCurrentSong, currentSong, setIsPlaying, likedSongs, setLikedSongs, playSong, }} />
 
 
       {currentSong && (
@@ -166,7 +190,7 @@ useEffect(() => {
     <button
       onClick={(e) => {
         e.stopPropagation();
-        playPrev();
+        playNext();
     }}>
         <FaForward/>
     </button>
@@ -221,7 +245,7 @@ useEffect(() => {
       <button
         onClick={(e) => {
           e.stopPropagation();
-          playPrev();
+          playNext();
       }}>
         <FaForward/>
       </button>

@@ -1,7 +1,10 @@
 .trending-page {
-   margin-top: 100px;
+  margin-top: 100px;
   padding: 20px;
   background: #f5f5f5;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* HERO */
@@ -42,24 +45,56 @@
 /* CARDS */
 .card {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  
-  
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  width: 100%;
+  align-items: stretch;
 }
+
+/* GRIDS */
+.trending-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.artist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+}
+
+.genre-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.playlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+
 
 /* TREND CARD */
 .trend-card {
-  min-width: 30px;
-  background: white;
+  background: #fff;
   border-radius: 20px;
   overflow: hidden;
-  position: relative;
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+  transition: all .3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.trend-card:hover {
+  transform: translateY(-6px);
 }
 
 .trend-card img {
   width: 100%;
-  height: 200px;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
 }
 
@@ -85,35 +120,52 @@
 }
 
 .card-content {
-  padding: 15px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
 }
 
 .card-actions {
   display: flex;
   gap: 10px;
-  padding: 10px;
+  margin-top: auto;
+  padding-top: 12px;
 }
 
-.play-btn {
+.card-actions button {
+  flex: 1;
+}
+
+.Tplay-btn {
   flex: 1;
   background: linear-gradient(90deg,#ff4d8d,#ff8a00);
   color: white;
   border: none;
   padding: 10px;
   border-radius: 10px;
+
 }
 
 /* ARTIST */
+
+
+
 .artist-card {
-  background: white;
-  padding: 15px;
-  border-radius: 15px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,.08);
 }
 
 .artist-card img {
-  width: 100%;
-  height: 150px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
   object-fit: cover;
+  margin: 0 auto 16px;
 }
 
 .artist-footer{
@@ -123,11 +175,7 @@
 }
 
 /* GENRE */
-.genre-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 20px;
-}
+
 
 .genre-card {
   background: white;
@@ -198,10 +246,12 @@
 .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.35);
 
+  display: flex;              /* <-- ADD THIS */
   align-items: flex-end;
   justify-content: flex-end;
+
   padding: 12px;
 
   opacity: 0;
@@ -215,7 +265,7 @@
 }
 
 /* PLAY BUTTON */
-.play-btn {
+.overlay-Tplay-btn {
   background: #1db954;
   border: none;
   color: white;
@@ -229,19 +279,72 @@
   align-items: center;
   justify-content: center;
 
-  transform: translateY(20px);
+  transform: translateY(30px);
   opacity: 0;
 
   transition: all 0.3s ease;
 }
 
 /* BUTTON POP EFFECT */
-.image-wrapper:hover .play-btn {
+.image-wrapper:hover .overlay-play-btn {
   transform: translateY(0);
   opacity: 1;
 }
 
 /* HOVER PRESS */
-.play-btn:hover {
+.overlay-play-btn:hover {
   transform: scale(1.1);
+}
+
+/* RESPONSIVENESS */
+@media (max-width: 1024px) {
+  .section {
+    padding: 30px;
+  }
+
+  .trending-hero {
+    padding: 40px 30px;
+  }
+
+  .trending-hero h1 {
+    font-size: 44px;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 20px;
+  }
+
+  .trending-hero {
+    padding: 30px 20px;
+  }
+
+  .trending-hero h1 {
+    font-size: 34px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .trending-hero h1 {
+    font-size: 28px;
+  }
+
+  .card {
+    grid-template-columns: 1fr;
+  }
+
+  .artist-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .genre-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

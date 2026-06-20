@@ -1,14 +1,32 @@
-import "./MyPlaylists.css";
-import SNavbar from "../../DashNavBar/sNavbar";
-import Footer from "../../Dashboard/Footer/Footer";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import "./DPlaylists.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
+const playlists = [
+  {
+    title: "Workout Mix",
+    tracks: "45 tracks • 3h 12m",
+    img: "/images/Workout Mix.jpeg",
+  },
+  {
+    title: "Chill Vibes",
+    tracks: "32 tracks • 2h 24m",
+    img: "/images/Chill  Vibes.jpeg",
+  },
+  {
+    title: "Study Focus",
+    tracks: "28 tracks • 2h 45m",
+    img: "/images/Study Focus.jpeg",
+  },
+  {
+    title: "Party Hits",
+    tracks: "52 tracks • 3h 48m",
+    img: "/images/Party Hits.jpeg",
+  },
+];
 
-import "../Home/dashboard.css";
-
-function Playlists() {
+function DPlaylists() {
 
 const navigate = useNavigate();
 const [playlists, setPlaylists] = useState([]);
@@ -68,20 +86,14 @@ useEffect(() => {
 }, []);
   return (
     <>
-      <div className="dashboard-container">
+      
 
       <div className="playlist-page">
-
-        {/* HERO */}
-        <div className="playlist-hero">
-          <h1>My Playlists</h1>
-          <p>Organize and enjoy your music collections</p>
-        </div>
 
         {/* SECTION */}
         <div className="playlist-section">
           <div className="playlist-header">
-            <h2>🎧 Your Collections</h2>
+            <h2>Your Playlists🎧</h2>
             <button
               className="create-btn"
               onClick={() => {
@@ -120,11 +132,9 @@ useEffect(() => {
           </div>
 
         </div>
-            <Footer/>
       </div>
-      </div>
+      
     </>
   );
 }
-
-export default Playlists;
+export default DPlaylists;

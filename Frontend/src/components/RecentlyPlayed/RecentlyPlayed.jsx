@@ -1,10 +1,14 @@
 import "./RecentlyPlayed.css";
 import { FaFileImport } from "react-icons/fa";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { useState, useEffect } from "react";
 import axios from "axios";
+import { useOutletContext } from "react-router-dom";
 
-function RecentlyPlayed({ songs, setCurrentSong, setCurrentIndex, currentSong, currentUser, likedSongs=[], setLikedSongs }) {
+function RecentlyPlayed({ songs, setCurrentSong, setCurrentIndex, currentSong, currentUser, likedSongs=[], setLikedSongs, }) {
   console.log("currentUser in RecentlyPlayed:", currentUser);
+  const {playSong,} = useOutletContext();
+
   
   const handleLike = async (songId) => {
   console.log("❤️ handleLike called:", songId);
@@ -44,6 +48,33 @@ function RecentlyPlayed({ songs, setCurrentSong, setCurrentIndex, currentSong, c
     console.error(err);
   }
 };
+
+const [playlists, setPlaylists] = useState([]);
+
+useEffect(() => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  axios
+    .get(`http://localhost:3000/api/playlists/${user._id || user.id}`)
+    .then((res) => setPlaylists(res.data))
+    .catch(console.error);
+}, []);
+
+const handleAddToPlaylist = async (songId) => {
+  const playlistName = prompt(
+    "Enter playlist name:\n" +
+    playlists.map((p) => p.name).join("\n")
+  );
+
+  const playlist = playlists.find((p) => p.name === playlistName);
+
+  if (!playlist) {
+    alert("Playlist not found");
+    return;
+  }
+
+  // Call your backend API here
+};
   
 
   
@@ -62,11 +93,9 @@ function RecentlyPlayed({ songs, setCurrentSong, setCurrentIndex, currentSong, c
             key={song._id}
             className={`song-card ${
               currentSong?._id === song._id ? "active" : ""}`}
-            onClick={() => {
-              console.log("🎵 Card clicked");
-              setCurrentSong(song);
-              setCurrentIndex(index);
-            }}
+              onClick={() => {
+                playSong(song, songs);
+              }}
           >
 
             <div className="img-wrapper">
@@ -80,8 +109,7 @@ function RecentlyPlayed({ songs, setCurrentSong, setCurrentIndex, currentSong, c
                 className="play-btn"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setCurrentSong(song);
-                  setCurrentIndex(index);
+                  playSong(song, songs)
                 }}
               >
                 ▶

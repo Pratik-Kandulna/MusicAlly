@@ -2,6 +2,8 @@ import SNavbar from "../../DashNavBar/sNavbar";
 import Footer from "../../Dashboard/Footer/Footer";
 import "../Home/dashboard.css";
 import "./NewRelease.css";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { useOutletContext } from "react-router-dom";
 
 const releases = [
@@ -46,6 +48,33 @@ const releases = [
 function NewRelease() {
 
 const { songs, setSongs, search, setSearch } = useOutletContext();
+
+const [playlists, setPlaylists] = useState([]);
+
+useEffect(() => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  axios
+    .get(`http://localhost:3000/api/playlists/${user._id || user.id}`)
+    .then((res) => setPlaylists(res.data))
+    .catch(console.error);
+}, []);
+
+const handleAddToPlaylist = async (songId) => {
+  const playlistName = prompt(
+    "Enter playlist name:\n" +
+    playlists.map((p) => p.name).join("\n")
+  );
+
+  const playlist = playlists.find((p) => p.name === playlistName);
+
+  if (!playlist) {
+    alert("Playlist not found");
+    return;
+  }
+
+  // Call your backend API here
+};
 
 
   return (

@@ -17,6 +17,7 @@ import CreateAcc from "./components/Pages/Login/CreateAcc";
 import Upload from "./components/Pages/Upload/Upload";
 import MainLayout from "./components/MainLayout/MainLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import PlaylistDetails from "./components/PlaylistDetails/playListDetails";
 
 function App() {
 
@@ -201,8 +202,19 @@ function App() {
     </ProtectedRoute>
   }
 />
+
+<Route
+  path="/playlist/:playlistId"
+  element={
+  <ProtectedRoute>
+    <PlaylistDetails />
+  </ProtectedRoute>
+  }
+/>
    
   </Route>
+
+  
 
 </Routes>
     

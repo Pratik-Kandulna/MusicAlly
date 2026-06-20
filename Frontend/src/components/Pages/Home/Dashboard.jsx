@@ -2,7 +2,7 @@ import SNavbar from "../../DashNavBar/sNavbar";
 import Welcome from "../../Welcome/Welcome";
 import QuickCards from "../../QuickCards/QuickCards";
 import RecentlyPlayed from "../../RecentlyPlayed/RecentlyPlayed";
-import Playlists from "../../Dashboard/Playlists/Playlists";
+import DPlaylists from "../../Dashboard/Playlists/DPlaylists";
 import JumpBack from "../../Dashboard/JumpBack/JumpBack";
 import Recommended from "../../Recommended/Recommended";
 import Footer from "../../Dashboard/Footer/Footer";
@@ -140,7 +140,7 @@ console.log("Filtered:", songs.length);
         setCurrentIndex={setCurrentIndex} 
         currentSong={currentSong}
       />
-      <Playlists />
+      <DPlaylists />
       <JumpBack />
       <Recommended />
 

@@ -5,14 +5,13 @@ import Footer from "../../Dashboard/Footer/Footer";
 import { useState, useEffect } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import axios from "axios";
-
-
 import { useOutletContext } from "react-router-dom";
 
 
 
-function Favourites({ songs, setCurrentSong, setCurrentIndex, currentSong, currentUser,likedSongs, setLikedSongs }) {
+function Favourites({setCurrentSong, setCurrentIndex, currentSong, currentUser,likedSongs, setLikedSongs, }) {
 
+const {songs, setSongs, search, setSearch, playSong,} = useOutletContext();  
 
 const [favourites, setFavourites] = useState([]);
 
@@ -112,11 +111,7 @@ console.log(
               
             <div className="fav-card" 
               onClick={() => {
-                const index = songs.findIndex((s) => s._id === song._id);
-                console.log(index); 
-
-                setCurrentSong(song);
-                setCurrentIndex(index);                
+                playSong(song, favourites);
               }}
               
             key={song._id}>

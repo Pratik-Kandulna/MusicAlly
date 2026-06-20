@@ -2,14 +2,17 @@ import SNavbar from "../../DashNavBar/sNavbar";
 import Footer from "../../Dashboard/Footer/Footer";
 import "../Home/dashboard.css";
 import "./Trending.css";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { useOutletContext } from "react-router-dom";
 
 function Trending() {
 
-const { songs, setSongs, search, setSearch, setCurrentSong, currentSong } = useOutletContext();
-const safeSongs = songs || [];
+const {songs, setSongs, playSong, setCurrentSong,} = useOutletContext();const safeSongs = songs || [];
 
-const trendingSongs = safeSongs.slice(0, 6);
+const trendingSongs = [...safeSongs]
+  .sort((a, b) => (b.plays || 0) - (a.plays || 0))
+  .slice(0, 6);
 
 {/**********-BREAKOUT-ARTISTS-*********** */}
 const breakoutArtists = Object.values(
@@ -70,6 +73,33 @@ const breakoutArtists = Object.values(
   }
 };
 
+const [playlists, setPlaylists] = useState([]);
+
+useEffect(() => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  axios
+    .get(`http://localhost:3000/api/playlists/${user._id || user.id}`)
+    .then((res) => setPlaylists(res.data))
+    .catch(console.error);
+}, []);
+
+const handleAddToPlaylist = async (songId) => {
+  const playlistName = prompt(
+    "Enter playlist name:\n" +
+    playlists.map((p) => p.name).join("\n")
+  );
+
+  const playlist = playlists.find((p) => p.name === playlistName);
+
+  if (!playlist) {
+    alert("Playlist not found");
+    return;
+  }
+
+  // Call your backend API here
+};
+
 
   return (
     <>
@@ -93,142 +123,128 @@ const breakoutArtists = Object.values(
       </div>
 
       {/* TRENDING NOW */}
-      <div className="section">
-        <h2>🔥 Trending Now</h2>
+      <section className="section">
+  <div className="section-header">
+    <h2>🔥 Trending Now</h2>
+  </div>
 
-        <div className="cards" >
-          {trendingSongs.map((song, i) => (
-            <div className="trend-card"  onClick={() => setCurrentSong(song)} key={i}>
-              <span className="rank">{i+1}</span>
-              <span className="growth">+{200 - i*30}%</span>
+  <div className="trending-grid">
+  {trendingSongs.map((song) => (
+    <div className="trend-card" key={song._id}>
+      {/* Cover Image */}
+      <div className="image-wrapper">
+        <img
+          src={`http://localhost:3000/${song.coverImage}`}
+          alt={song.title}
+        />
 
-              <div 
-                className="image-wrapper"
-                onClick={() => setCurrentSong(song)}
-              >
-                 <img src={`http://localhost:3000/${song.coverImage}`} />
-
-                    <div className="overlay">
-                      <button
-                        className="play-btn"
-                        onClick={(e) => {
-                        e.stopPropagation();
-                        if (currentSong?._id === song._id) {
-                        // same song → toggle play/pause handled in MainLayout
-                        } else {
-                                setCurrentSong(song);
-                          }
-                        }}
-                      >
-                        {currentSong?._id === song._id ? "⏸" : "▶"}
-                      
-                      </button>
-                    </div>
-                </div>
-
-              <div className="card-content" onClick={() => setCurrentSong(song)} >
-                <p className="genre">{song.genre || "Music"}</p>
-                <h3>{song.title}</h3>
-                <p className="artist">{song.artist}</p>
-                <div className="plays">
-                  <span>4.3M plays</span>
-                </div>
-              </div>
-
-              <div className="card-actions">
-                <button
-                  className="play-btn"
-                  onClick={() => setCurrentSong(song)}
-                  >
-                    PLAY
-                </button>
-                <button>♡</button>
-                <button>↗</button>
-              </div>
-            </div>
-            
-          ))}
+        {/* Hover Overlay */}
+        <div className="overlay">
+          <button
+            className="overlay-play-btn"
+            onClick={() => playSong(song, trendingSongs)}
+          >
+            ▶
+          </button>
         </div>
       </div>
+
+      {/* Card Content */}
+      <div className="card-content">
+        <span>{song.genre}</span>
+
+        <h3>{song.title}</h3>
+
+        <p>{song.artist}</p>
+
+        <small>{song.plays || 0} plays</small>
+
+        {/* Bottom Buttons */}
+        <div className="card-actions">
+          <button
+            className="Tplay-btn"
+            onClick={() => playSong(song, trendingSongs)}
+          >
+            ▶ Play
+          </button>
+
+          <button
+            className="add-btn"
+            onClick={() => handleAddToPlaylist(song._id)}
+          >
+            ➕ Add
+          </button>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+</section>
 
       {/* BREAKOUT ARTISTS */}
-      <div className="section">
-        <div className="section-header">
-          <h2>Breakout Artists</h2>
-          <button>View All</button>
-        </div>
+      
+      <section className="section">
+  <div className="section-header">
+    <h2>Breakout Artists</h2>
+  </div>
 
-        <div className="cards">
-          {breakoutArtists.map((artist, i) => (
-          <div className="artist-card" 
-          key={i}
-          onClick={() => handleArtistClick(artist.name)}>
-            <span className="growth">+{300 - i * 50}%</span>
-            <img src={`http://localhost:3000/${artist.cover}`} />
-            <h3>{artist.name}</h3>
-            
+  <div className="artist-grid">
+    {breakoutArtists.map((artist) => (
+        <div className="artist-card" key={artist.name}>
+        <img src={artist.cover} alt={artist.name} />
 
-            <div className="artist-footer">
-              <p>{artist.count} songs</p>
-              <span>{(artist.count * 0.5).toFixed(1)}M</span>
-              <button
-                onClick={(e) => e.stopPropagation()}
-              >
-                + Follow
-              </button>
-            </div>
-          </div>
-        ))}
-        </div>
+        <h3>{artist.name}</h3>
+
+        <p>{artist.count} songs</p>
+
+        <p>{artist.count} uploaded songs</p>
+
+        <button>+ Follow</button>
       </div>
+    ))}
+  </div>
+</section>
 
       {/* TRENDING GENRES */}
-      <div className="section">
-        <h2>Trending Genres</h2>
+      <section className="section">
+  <h2>Trending Genres</h2>
 
-        <div className="genre-grid">
-          {trendingGenres.map((genre, i) => (
-          <div className="genre-card" 
-          key={i}
-          onClick={() => handleGenreClick(genre.name)}
-        >
-            <div className="icon"></div>
+  <div className="genre-grid">
+      {trendingGenres.map((genre) => (
+      <div className="genre-card" key={genre.name}>
+        <div className="icon"></div>
 
-              <h3
-              onClick={() => handleGenreClick(genre)}
-              >{genre.name}</h3>
-              <p>{genre.count} tracks</p>
+        <h3>{genre.name}</h3>
 
-              <span className="growth">+150%</span>
-            </div>
-          ))}
-        </div>
+        <p>{genre.count} songs</p>
       </div>
+    ))}
+  </div>
+</section>
 
       {/* VIRAL PLAYLISTS */}
-      <div className="section">
-        <div className="section-header">
-          <h2>Viral Playlists</h2>
-          <button>Explore More</button>
-        </div>
+      <section className="section">
+  <div className="section-header">
+    <h2>Viral Playlists</h2>
+  </div>
 
-        <div className="cards">
-          {["TikTok Viral Hits","Trending Now","Viral Hits 2026","Hot Right Now"].map((p,i)=>(
-            <div className="playlist-card" key={i}>
-              <span className="tag">🔥 Viral</span>
-              <img src={`/images/playlist${i+1}.jpg`} />
+  <div className="playlist-grid">
+    {playlists.map((playlist) => (
+      <div className="playlist-card" key={playlist._id}>
+        <img
+          src="https://placehold.co/400x400?text=Playlist"
+          alt={playlist.name}
+        />
 
-              <h3>{p}</h3>
-              <p>by MusicAlly</p>
+        <div className="card-content">
+          <h3>{playlist.name}</h3>
 
-              <div className="playlist-footer">
-                <span>50 tracks</span>
-                <span>2.5M</span>
-              </div>
-            </div>
-          ))}
+          <p>{playlist.trackCount} Tracks</p>
         </div>
       </div>
+    ))}
+  </div>
+</section>
 
     </div>
     <Footer/>
