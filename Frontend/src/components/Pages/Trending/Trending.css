@@ -3,8 +3,11 @@
   padding: 20px;
   background: #f5f5f5;
   max-width: 1400px;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 /* HERO */
@@ -54,20 +57,29 @@
 /* GRIDS */
 .trending-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px;
+  width: 100%;
 }
 
 .artist-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  display: flex;
   gap: 24px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 8px 12px 16px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.artist-grid::-webkit-scrollbar {
+  height: 8px;
 }
 
 .genre-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 20px;
+  width: 100%;
 }
 
 .playlist-grid {
@@ -153,16 +165,21 @@
 
 
 .artist-card {
+  flex: 0 0 260px;
+  min-width: 260px;
   background: #fff;
   border-radius: 18px;
   padding: 24px;
   text-align: center;
   box-shadow: 0 8px 20px rgba(0,0,0,.08);
+  box-sizing: border-box;
+  scroll-snap-align: start;
 }
 
 .artist-card img {
-  width: 120px;
-  height: 120px;
+  width: 140px;
+  height: 140px;
+  max-width: 100%;
   border-radius: 50%;
   object-fit: cover;
   margin: 0 auto 16px;
@@ -175,7 +192,13 @@
 }
 
 /* GENRE */
-
+.genre-songs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 320px));
+  gap: 24px;
+  justify-content: start;
+  align-items: start;
+}
 
 .genre-card {
   background: white;
@@ -286,13 +309,13 @@
 }
 
 /* BUTTON POP EFFECT */
-.image-wrapper:hover .overlay-play-btn {
+.image-wrapper:hover .overlay-Tplay-btn {
   transform: translateY(0);
   opacity: 1;
 }
 
 /* HOVER PRESS */
-.overlay-play-btn:hover {
+.overlay-Tplay-btn:hover {
   transform: scale(1.1);
 }
 
@@ -329,6 +352,22 @@
     align-items: flex-start;
     gap: 12px;
   }
+
+  .trending-grid,
+  .playlist-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .genre-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .trend-card,
+  .artist-card,
+  .playlist-card,
+  .genre-card {
+    width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
@@ -340,11 +379,15 @@
     grid-template-columns: 1fr;
   }
 
-  .artist-grid {
-    grid-template-columns: 1fr;
-  }
-
   .genre-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .trending-page {
+    padding: 12px;
+  }
+
+  .section {
+    padding: 16px 0;
   }
 }

@@ -22,6 +22,7 @@ function Login() {
       {
         email,
         password,
+        role,
       }
     );
 

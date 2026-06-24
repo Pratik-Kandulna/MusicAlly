@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./Upload.css";
 
 function Upload() {
 const navigate = useNavigate();
@@ -67,73 +68,75 @@ navigate("/Dashboard", { state: { refresh: true } });
 
 
   return (
-    <div style={{ padding: "40px" }}>
-      <h2>Upload Song</h2>
+    <div className="upload-page">
+      <div className="upload-card">
+        <h2 className="upload-title">Upload Song</h2>
+        <form onSubmit={handleUpload} className="upload-form">
+          <input
+            type="text"
+            placeholder="Song Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            className="upload-input"
+          />
 
-      <form onSubmit={handleUpload}>
-        <input
-          type="text"
-          placeholder="Song Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-        <br /><br />
+          <input
+            type="text"
+            placeholder="Artist"
+            value={artist}
+            onChange={(e) => setArtist(e.target.value)}
+            required
+            className="upload-input"
+          />
 
-        <input
-          type="text"
-          placeholder="Artist"
-          value={artist}
-          onChange={(e) => setArtist(e.target.value)}
-          required
-        />
-        <br /><br />
+          <select
+            value={genre}
+            required
+            onChange={(e) => setGenre(e.target.value)}
+            className="upload-input"
+          >
+            <option value="">Select Genre</option>
+            <option value="pop">Pop</option>
+            <option value="hip hop">Hip Hop</option>
+            <option value="pop rock">Pop Rock</option>
+            <option value="lofi">Lo-fi</option>
+          </select>
 
-        <select value={genre} required onChange={(e) => setGenre(e.target.value)}>
-          <option value="">Select Genre</option>
-          <option value="pop">Pop</option>
-          <option value="hip hop">Hip Hop</option>
-          <option value="pop rock">Pop Rock</option>
-          <option value="lofi">Lo-fi</option>
-        </select>
+          <input
+            type="text"
+            placeholder="Album"
+            value={album}
+            onChange={(e) => setAlbum(e.target.value)}
+            className="upload-input"
+          />
 
-        <br /><br />  
+          <label className="upload-label">Cover Image</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setCover(e.target.files[0])}
+            required
+            className="upload-file"
+          />
 
-        <input
-          type="text"
-          placeholder="Album"
-          value={album}
-          onChange={(e) => setAlbum(e.target.value)}
-          
-        />
+          <label className="upload-label">Audio File</label>
+          <input
+            type="file"
+            accept="audio/*"
+            onChange={(e) => setAudio(e.target.files[0])}
+            required
+            className="upload-file"
+          />
 
-        <br /><br />
-
-        <span>Cover: </span>
-        <input
-          type="file"
-          placeholder="Cover"
-          accept="image/*"
-          onChange={(e) => setCover(e.target.files[0])}
-          required
-        />
-        <br /><br />
-
-        <span>Song: </span>
-        <input
-          type="file"
-          
-          accept="audio/*"
-          onChange={(e) => setAudio(e.target.files[0])}
-          required
-        />
-        <br /><br />
-
-        
-
-        <button  type="submit">Upload</button>
-       
-      </form>
+          <button
+            type="submit"
+            className="upload-button"
+          >
+            Upload
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

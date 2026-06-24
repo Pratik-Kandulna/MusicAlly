@@ -115,7 +115,10 @@ useEffect(() => {
                 key={item._id}
                 onClick={() => navigate(`/playlist/${item._id}`)}
               >
-                <img src={item.img} alt="" />
+                <img src={item.songs?.[0]?.coverImage
+                      ? `http://localhost:3000/${item.songs[0].coverImage}`
+                      : item.img || "/images/playlist-placeholder.png"}
+                       alt="" />
                 <h3>{item.name}</h3>
                 <p>{item.songs.length} songs</p>
 

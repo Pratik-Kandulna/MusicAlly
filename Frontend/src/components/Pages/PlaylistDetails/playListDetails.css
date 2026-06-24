@@ -91,3 +91,18 @@
 .remove-btn:hover {
   background: #dc2626;
 }
+
+.play-all-btn {
+  background: linear-gradient(90deg, #ff4d8d, #ff8a00);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 16px 0 24px;
+  font-weight: 600;
+}
+
+.play-all-btn:hover {
+  opacity: 0.9;
+}

@@ -5,48 +5,14 @@ import "./TopCharts.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useOutletContext } from "react-router-dom";
-
-const charts = [
-  {
-    title: "Blinding Lights",
-    artist: "The Weeknd",
-    img: "/images/song1.jpg",
-    plays: "9.8M",
-    duration: "3:20"
-  },
-  {
-    title: "Levitating",
-    artist: "Dua Lipa",
-    img: "/images/song2.jpg",
-    plays: "8.5M",
-    duration: "3:23"
-  },
-  {
-    title: "Peaches",
-    artist: "Justin Bieber",
-    img: "/images/song3.jpg",
-    plays: "7.9M",
-    duration: "3:18"
-  },
-  {
-    title: "Stay",
-    artist: "The Kid LAROI",
-    img: "/images/song4.jpg",
-    plays: "7.5M",
-    duration: "2:45"
-  },
-  {
-    title: "Shape of You",
-    artist: "Ed Sheeran",
-    img: "/images/song5.jpg",
-    plays: "7.1M",
-    duration: "4:10"
-  }
-];
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 function TopCharts() {
 
-const { songs, setSongs, search, setSearch } = useOutletContext();
+const { songs, setSongs, search, setSearch, playSong, currentSong, isPlaying, togglePlay, likedSongs, toggleLike } = useOutletContext();
+console.log('TopCharts toggleLike:', toggleLike, 'likedSongs:', likedSongs);
+
+const topSongs = [...(songs || [])].sort((a, b) => (b.plays || 0) - (a.plays || 0));
 
 const [playlists, setPlaylists] = useState([]);
 
@@ -72,7 +38,17 @@ const handleAddToPlaylist = async (songId) => {
     return;
   }
 
-  // Call your backend API here
+  try {
+    await axios.post(
+      `http://localhost:3000/api/playlists/${playlist._id}/add-song`,
+      { songId }
+    );
+
+    alert("Song added to playlist successfully!");
+  } catch (err) {
+    console.error(err);
+    alert("Failed to add song to playlist.");
+  }
 };
 
 
@@ -95,25 +71,82 @@ const handleAddToPlaylist = async (songId) => {
         <div className="charts-section">
           <h2>🔥 Trending Tracks</h2>
 
-          <div className="charts-list">
-            {charts.map((song, index) => (
-              <div className="chart-row" key={index}>
+          <div className="topcharts-grid">
+            {topSongs.map((song, index) => (
+              <div
+                className={`chart-row ${String(currentSong?._id) === String(song._id) ? "active-chart-row" : ""}`}
+                key={index}
+                onClick={() => playSong(song, topSongs)}
+                style={{ cursor: "pointer" }}
+              >
+                <div className="chart-left">
+                  <span className="rank">#{index + 1}</span>
 
-                <span className="rank">{index + 1}</span>
+                  <div className="chart-image-wrapper">
+                    <img
+                      src={`http://localhost:3000/${song.coverImage}`}
+                      alt={song.title}
+                    />
 
-                <img src={song.img} alt="" />
+                    {String(currentSong?._id) === String(song._id) && (
+                      <button
+                        className="Tplay-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          togglePlay();
+                        }}
+                      >
+                        {isPlaying ? "⏸" : "▶"}
+                      </button>
+                    )}
+                  </div>
 
-                <div className="song-info">
-                  <h3>{song.title}</h3>
-                  <p>{song.artist}</p>
+                  <div className="song-info">
+                    <h3>{song.title}</h3>
+                    <p>{song.artist}</p>
+                    <small>
+                      {song.genre} • {song.plays || 0} plays
+                    </small>
+                  </div>
                 </div>
 
-                <span className="plays">{song.plays}</span>
+                <div className="chart-actions">
 
-                <span className="duration">{song.duration}</span>
+                  <button
+                    type="button"
+                    className="genre-like-btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (typeof toggleLike === 'function') {
+                        toggleLike(e, song._id);
+                      } else {
+                        console.error('toggleLike is not available from useOutletContext');
+                      }
+                    }}
+                  >
+                    {(likedSongs || []).some((id) => String(id) === String(song._id)) ? (
+                      <FaHeart
+                        color="red"
+                        style={{ cursor: "pointer" }}
+                      />
+                    ) : (
+                      <FaRegHeart
+                        style={{ cursor: "pointer" }}
+                      />
+                    )}
+                  </button>
 
-                <button className="play-btn">▶</button>
-
+                  <button
+                    className="add-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddToPlaylist(song._id);
+                    }}
+                  >
+                    ➕ Add
+                  </button>
+                </div>
               </div>
             ))}
           </div>

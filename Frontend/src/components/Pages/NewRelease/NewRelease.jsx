@@ -5,51 +5,86 @@ import "./NewRelease.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useOutletContext } from "react-router-dom";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
-const releases = [
-  {
-    title: "Echo Nights",
-    artist: "Luna Waves",
-    img: "/images/Echo Nights.jpeg",
-    date: "Apr 2026"
-  },
-  {
-    title: "Neon Dreams",
-    artist: "Nova Beats",
-    img: "/images/Neon Dreams.jpeg",
-    date: "Mar 2026"
-  },
-  {
-    title: "Skyline",
-    artist: "DJ Pulse",
-    img: "/images/Skyline.jpeg",
-    date: "Mar 2026"
-  },
-  {
-    title: "Golden Hour",
-    artist: "Aurora",
-    img: "/images/ Golden Hour.jpeg",
-    date: "Feb 2026"
-  },
-  {
-    title: "Midnight Drive",
-    artist: "The Saxman",
-    img: "/images/Midnight Drive.jpeg",
-    date: "Feb 2026"
-  },
-  {
-    title: "Electric Soul",
-    artist: "Spectrum",
-    img: "/images/Electric Soul.jpeg",
-    date: "Jan 2026"
-  }
-];
 
 function NewRelease() {
 
-const { songs, setSongs, search, setSearch } = useOutletContext();
+  const { songs, search, playSong, currentSong, isPlaying, togglePlay, likedSongs, setLikedSongs } = useOutletContext();
 
-const [playlists, setPlaylists] = useState([]);
+  const handleLike = async (songId) => {
+    const loggedInUser = JSON.parse(localStorage.getItem("user"));
+    if (!loggedInUser) return;
+
+    const isLiked = (likedSongs || []).some(
+      (id) => String(id) === String(songId)
+    );
+
+    try {
+      if (isLiked) {
+        await axios.post("http://localhost:3000/api/auth/unlike", {
+          userId: loggedInUser._id || loggedInUser.id,
+          songId,
+        });
+
+        setLikedSongs((prev) =>
+          prev.filter((id) => String(id) !== String(songId))
+        );
+      } else {
+        await axios.post("http://localhost:3000/api/auth/like", {
+          userId: loggedInUser._id || loggedInUser.id,
+          songId,
+        });
+
+        setLikedSongs((prev) => [...prev, songId]);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const [playlists, setPlaylists] = useState([]);
+
+const newReleases = [...(songs || [])]
+  .filter((song) => {
+    const q = (search || "").toLowerCase();
+    return (
+      song.title?.toLowerCase().includes(q) ||
+      song.artist?.toLowerCase().includes(q)
+    );
+  })
+  .sort(
+    (a, b) =>
+      new Date(b.releaseDate || b.createdAt) -
+      new Date(a.releaseDate || a.createdAt)
+  );
+
+const getRelativeTime = (dateValue) => {
+  if (!dateValue) {
+    return "Recently added";
+  }
+  const date = new Date(dateValue);
+  const now = new Date();
+  const diffMs = now - date;
+  const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (days < 7) {
+    return `${Math.max(days, 0)} day${days === 1 ? "" : "s"} ago`;
+  }
+
+  const weeks = Math.floor(days / 7);
+  if (weeks < 5) {
+    return `${weeks} week${weeks === 1 ? "" : "s"} ago`;
+  }
+
+  const months = Math.floor(days / 30);
+  if (months < 12) {
+    return `${months} month${months === 1 ? "" : "s"} ago`;
+  }
+
+  const years = Math.floor(days / 365);
+  return `${years} year${years === 1 ? "" : "s"} ago`;
+};
 
 useEffect(() => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -73,7 +108,16 @@ const handleAddToPlaylist = async (songId) => {
     return;
   }
 
-  // Call your backend API here
+  try {
+    await axios.post(
+      `http://localhost:3000/api/playlists/${playlist._id}/add-song`,
+      { songId }
+    );
+    alert("Song added successfully!");
+  } catch (err) {
+    console.error(err);
+    alert("Failed to add song.");
+  }
 };
 
 
@@ -94,20 +138,67 @@ const handleAddToPlaylist = async (songId) => {
 
         {/* RELEASE GRID */}
         <div className="release-section">
-          <h2>Latest Albums & Singles</h2>
+          <h2>Latest Releases ({newReleases.length})</h2>
 
           <div className="release-grid">
-            {releases.map((item, index) => (
-              <div className="release-card" key={index}>
-                <img src={item.img} alt="" />
+            {newReleases.map((song, index) => (
+              <div
+                className={`release-card ${String(currentSong?._id) === String(song._id) ? "active-release-card" : ""}`}
+                key={song._id || index}
+                onClick={() => playSong(song, newReleases)}
+              >
+                <img src={`http://localhost:3000/${song.coverImage}`} alt={song.title} />
 
                 <div className="release-info">
-                  <h3>{item.title}</h3>
-                  <p>{item.artist}</p>
-                  <span>{item.date}</span>
+                  <h3>{song.title}</h3>
+                  <p>{song.artist}</p>
+                  <span>{getRelativeTime(song.releaseDate || song.createdAt)}</span>
                 </div>
 
-                <button className="play-btn">▶ Play</button>
+                <div className="release-actions">
+                  {String(currentSong?._id) === String(song._id || currentSong?._id) && (
+                    <button
+                      className="release-play-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        togglePlay();
+                      }}
+                    >
+                      {isPlaying ? "⏸" : "▶"}
+                    </button>
+                  )}
+                  <div className="release-like-btn">
+                    {(likedSongs || []).some(
+                      (id) => String(id) === String(song._id)
+                    ) ? (
+                      <FaHeart
+                        color="red"
+                        style={{ cursor: "pointer" }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleLike(song._id);
+                        }}
+                      />
+                    ) : (
+                      <FaRegHeart
+                        style={{ cursor: "pointer" }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleLike(song._id);
+                        }}
+                      />
+                    )}
+                  </div>
+                  <button
+                    className="add-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddToPlaylist(song._id);
+                    }}
+                  >
+                    ➕ Add
+                  </button>
+                </div>
               </div>
             ))}
           </div>

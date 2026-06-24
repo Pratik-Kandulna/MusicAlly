@@ -17,7 +17,9 @@ import CreateAcc from "./components/Pages/Login/CreateAcc";
 import Upload from "./components/Pages/Upload/Upload";
 import MainLayout from "./components/MainLayout/MainLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
-import PlaylistDetails from "./components/PlaylistDetails/playListDetails";
+import PlaylistDetails from "./components/Pages/PlaylistDetails/playListDetails";
+import GenreDetails from "./components/Pages/GenreDetails/genreDetails";
+import ManageSongs from "./components/Pages/Upload/ManageSongs";
 
 function App() {
 
@@ -204,6 +206,22 @@ function App() {
 />
 
 <Route
+  path="/ManageSongs"
+  element={
+    <ProtectedRoute>
+      <ManageSongs
+        songs={songs}
+        setSongs={setSongs}
+        currentUser={currentUser}
+        currentSong={currentSong}
+        setCurrentSong={setCurrentSong}
+        filteredSongs={filteredSongs}
+      />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
   path="/playlist/:playlistId"
   element={
   <ProtectedRoute>
@@ -211,8 +229,17 @@ function App() {
   </ProtectedRoute>
   }
 />
+
+<Route 
+  path="/genres/:genreName" 
+  element={
+  <ProtectedRoute>
+    <GenreDetails />
+  </ProtectedRoute>
+  }
+  />
    
-  </Route>
+</Route>
 
   
 

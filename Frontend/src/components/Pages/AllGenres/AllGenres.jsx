@@ -4,7 +4,7 @@ import "../Home/dashboard.css";
 import "./AllGenres.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 
 
@@ -26,6 +26,7 @@ const genres = [
 function AllGenres() {
 
 const { songs, setSongs, search, setSearch } = useOutletContext();
+const navigate = useNavigate();
 
 const [playlists, setPlaylists] = useState([]);
 
@@ -54,6 +55,12 @@ const handleAddToPlaylist = async (songId) => {
   // Call your backend API here
 };
 
+const getGenreSongs = (genreName) => {
+  return (songs || []).filter(
+    (song) =>
+      (song.genre || "").toLowerCase() === genreName.toLowerCase()
+  );
+};
 
   return (
     <>
@@ -70,15 +77,17 @@ const handleAddToPlaylist = async (songId) => {
           <p>Explore music across all your favorite genres</p>
         </div>
 
+        {/* Clicking a genre card navigates to its dedicated genre page */}
         {/* GRID */}
-        <div className="genres-container">
+        <div className="genres-container all-genres-grid">
           {genres.map((g, index) => (
             <div
-              className="genre-card"
+              className={`genre-card genre-card-${g.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
               key={index}
-              style={{
-                background: `linear-gradient(135deg, ${g.color}, rgba(0,0,0,0.4))`
-              }}
+              data-color={g.color}
+              onClick={() =>
+                navigate(`/genres/${encodeURIComponent(g.name.toLowerCase())}`)
+              }
             >
               <h2>{g.name}</h2>
               <p>{g.tracks} tracks</p>

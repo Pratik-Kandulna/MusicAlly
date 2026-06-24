@@ -1,101 +1,133 @@
-.topcharts-page {
-   margin-top: 100px;
-  padding: 20px;
-  background: #f5f5f5;
+.topcharts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1px;
+  align-items: start;
 }
 
-/* HERO */
-.topcharts-hero {
-  padding: 60px;
-  color: white;
-  background: linear-gradient(90deg, #ff4d8d, #ff8a00);
+.genre-song-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 200px));
+  gap: 16px;
+  justify-content: center;
 }
 
-.topcharts-hero h1 {
-  font-size: 55px;
-}
-
-.topcharts-hero p {
-  margin-top: 10px;
-  font-size: 18px;
-}
-
-/* SECTION */
-.charts-section {
-  padding: 40px 60px;
-}
-
-.charts-section h2 {
-  margin-bottom: 20px;
-}
-
-/* LIST */
-.charts-list {
+.chart-row {
+  max-width: 200px;
+  width: 100%;
+  background: #fff;
+  border-radius: 20px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  position: relative;
 }
 
-/* ROW */
-.chart-row {
-  display: grid;
-  grid-template-columns: 60px 2fr 1.5fr 80px 100px 80px;
-  align-items: center;
-  gap: 15px;
-
-  background: white;
-  padding: 12px 20px;
-  border-radius: 15px;
+.chart-image-wrapper {
+  position: relative;
+  width: 100%;
 }
 
-.chart-row:hover {
-  background: #f0f0f0;
-}
-
-/* RANK */
-.rank {
-  font-size: 20px;
-  font-weight: bold;
-}
-
-/* IMAGE */
-.chart-row img {
-  width: 60px;
-  height: 60px;
-  border-radius: 10px;
+.genre-song-cover {
+  width: 100%;
+  aspect-ratio: 1;
   object-fit: cover;
+  border-radius: 16px;
+  max-height: 180px;
+  display: block;
 }
 
-/* INFO */
-.song-info h3 {
-  margin: 0;
-  font-size: 16px;
+.genre-song-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
 }
 
-.song-info p {
-  margin: 0;
-  font-size: 13px;
-  color: gray;
+.genre-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 8px;
 }
 
-/* PLAYS */
-.plays {
-  font-size: 14px;
-  color: #555;
-}
-
-/* DURATION */
-.duration {
-  font-size: 14px;
-  color: #777;
-}
-
-/* BUTTON */
-.play-btn {
+.genre-add-btn {
+  min-width: 80px;
+  padding: 8px 14px;
+  height: 34px;
+  border-radius: 10px;
+  background: #ececec;
+  color: #444;
   border: none;
-  background: linear-gradient(90deg, #ff4d8d, #ff8a00);
-  color: white;
-  padding: 8px 10px;
-  border-radius: 8px;
   cursor: pointer;
+}
+
+.genre-play-btn {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #ff4d8d, #ff8a00);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+  transition: background 0.3s ease;
+  z-index: 5;
+}
+
+.genre-song-card.active {
+  box-shadow: 0 0 0 2px #c084fc, 0 10px 30px rgba(192,132,252,0.25);
+}
+
+@media (max-width: 768px) {
+  .topcharts-grid {
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+  }
+  .genre-song-list {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+  }
+  .genre-play-btn {
+    right: 12px;
+    bottom: 104px;
+  }
+}
+
+/* Compatibility rules for TopCharts-specific classes */
+.chart-image-wrapper img,
+.chart-left img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 16px;
+  display: block;
+}
+
+.chart-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.Tplay-btn {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(90deg,#ff4d8d,#ff8a00);
+  color: #fff;
+  z-index: 5;
 }

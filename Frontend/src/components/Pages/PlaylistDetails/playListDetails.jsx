@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import SNavbar from "../DashNavBar/sNavbar";
-import Footer from "../Dashboard/Footer/Footer";
+import SNavbar from "../../DashNavBar/sNavbar";
+import Footer from "../../Dashboard/Footer/Footer";
 import "./playListDetails.css";
-import "../Pages/Home/dashboard.css";
+import "../Home/dashboard.css";
 import { useParams } from "react-router-dom";
 
 import { useOutletContext } from "react-router-dom";
@@ -58,6 +58,16 @@ function PlaylistDetails() {
        <div className="playlist-details">
       <h1>{playlist.name}</h1>
       <p>Total Songs: {playlist.songs.length}</p>
+      <button
+        className="play-all-btn"
+        onClick={() => {
+          if (playlist.songs.length > 0) {
+            playSong(playlist.songs[0], playlist.songs);
+          }
+        }}
+      >
+        ▶ Play Playlist
+      </button>
 
       {playlist.songs.length === 0 ? (
         <h3>No songs in this playlist yet 🎵</h3>
@@ -99,7 +109,7 @@ function PlaylistDetails() {
       )}
     </div>
     
-    <Footer/>
+    
     </div>
     </>
   );

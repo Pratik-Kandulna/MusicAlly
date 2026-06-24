@@ -153,7 +153,7 @@ console.log("Filtered:", songs.length);
       Upload Song
     </button>
 
-    <button style={{ marginLeft: "10px" }}>
+    <button onClick={() => navigate("/ManageSongs")}>
       Manage Songs
     </button>
   </div>
@@ -198,7 +198,7 @@ console.log("Filtered:", songs.length);
   </>
 )}
 
-      <Footer />
+      
     
 
     

@@ -2,7 +2,7 @@ import "./sNavbar.css";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
-import { FaSearch } from "react-icons/fa";
+import { FaBell, FaFonticonsFi, FaSearch, FaUser } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 
 
@@ -214,7 +214,7 @@ const handleLogout = () => {
 
           <div className="sicon">
             <NavLink to="/Login">
-             <img src="/images/notification.png"/>
+             <FaBell/>
             </NavLink>
             <span className="sdot"></span>
           </div>
@@ -224,7 +224,7 @@ const handleLogout = () => {
           
             <button className="sicon">
             <div className="sdropdown" onClick={() => toggleMenu("profile")}>
-            <img src="/images/user.png"/>
+            <FaUser/>
             {activeMenu === "profile" && (
               <div className="sdropdown-menu">
                 <NavLink to="/profile">

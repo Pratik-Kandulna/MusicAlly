@@ -3,6 +3,7 @@ import SNavbar from "../DashNavBar/sNavbar";
 import { useState, useRef, useEffect } from "react";
 import { FaArrowDown, FaBackward, FaForward, FaIcons, FaPause, FaPlay } from "react-icons/fa";
 import axios from "axios";
+import Footer from "../Dashboard/Footer/Footer";
 
 
 function MainLayout({
@@ -49,6 +50,39 @@ function MainLayout({
     setIsPlaying(prev => !prev);
   };
 
+  const toggleLike = async (e, songId) => {
+    if (e) e.stopPropagation();
+
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) return;
+
+    const isLiked = (likedSongs || []).some(
+      (id) => String(id) === String(songId)
+    );
+
+    try {
+      if (isLiked) {
+        await axios.post("http://localhost:3000/api/auth/unlike", {
+          userId: user._id || user.id,
+          songId,
+        });
+
+        setLikedSongs((prev = []) =>
+          prev.filter((id) => String(id) !== String(songId))
+        );
+      } else {
+        await axios.post("http://localhost:3000/api/auth/like", {
+          userId: user._id || user.id,
+          songId,
+        });
+
+        setLikedSongs((prev = []) => [...prev, songId]);
+      }
+    } catch (err) {
+      console.error("Like toggle failed", err);
+    }
+  };
+
       {/***************-PLAY-NEXT-PREVIOUS-LOGIC*****************/}
   const playNext = () => {
   if (!currentSong || currentQueue.length === 0) return;
@@ -57,9 +91,12 @@ function MainLayout({
     (s) => s._id === currentSong._id
   );
 
-  if (currentIndex !== -1 && currentIndex < currentQueue.length - 1) {
-    playSong(currentQueue[currentIndex + 1], currentQueue);
-  }
+  if (currentIndex === -1) return;
+
+  const nextIndex = (currentIndex + 1) % currentQueue.length;
+
+  setCurrentSong(currentQueue[nextIndex]);
+  setIsPlaying(true);
 };
   
   const playPrev = () => {
@@ -69,9 +106,13 @@ function MainLayout({
     (s) => s._id === currentSong._id
   );
 
-  if (currentIndex > 0) {
-    playSong(currentQueue[currentIndex - 1], currentQueue);
-  }
+  if (currentIndex === -1) return;
+
+  const prevIndex =
+    (currentIndex - 1 + currentQueue.length) % currentQueue.length;
+
+  setCurrentSong(currentQueue[prevIndex]);
+  setIsPlaying(true);
 };
 
   console.log( currentSong?.title);
@@ -123,7 +164,7 @@ useEffect(() => {
         setCurrentSong={setCurrentSong}
       />
 
-      <Outlet context={{ songs, safeSongs, setSongs, search, setSearch, setCurrentSong, currentSong, setIsPlaying, likedSongs, setLikedSongs, playSong, }} />
+      <Outlet context={{ songs, safeSongs, setSongs, search, setSearch, setCurrentSong, currentSong, isPlaying, setIsPlaying, likedSongs, setLikedSongs, toggleLike, playSong, togglePlay }} />
 
 
       {currentSong && (
@@ -252,6 +293,7 @@ useEffect(() => {
     </div>
   </div>
 )}
+<Footer/>
     </>
   );
 }

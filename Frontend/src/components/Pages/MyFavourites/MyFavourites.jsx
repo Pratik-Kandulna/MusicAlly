@@ -158,7 +158,7 @@ console.log(
 
         </div>
 
-        <Footer/>
+        
 
       </div>
       </div>

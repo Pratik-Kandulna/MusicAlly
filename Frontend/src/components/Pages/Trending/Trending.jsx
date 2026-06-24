@@ -14,21 +14,33 @@ const trendingSongs = [...safeSongs]
   .sort((a, b) => (b.plays || 0) - (a.plays || 0))
   .slice(0, 6);
 
+
+  
+
 {/**********-BREAKOUT-ARTISTS-*********** */}
-const breakoutArtists = Object.values(
-  safeSongs.reduce((acc, song) => {
-    if (!acc[song.artist]) {
-      acc[song.artist] = {
-        name: song.artist,
-        count: 0,
-        cover: song.coverImage,
-      };
+const artistMap = {};
+
+safeSongs.forEach((song) => {
+  if (!artistMap[song.artist]) {
+    artistMap[song.artist] = {
+      name: song.artist,
+      image: `http://localhost:3000/${song.coverImage}`,
+      totalPlays: 0,
+      songCount: 0,
+    };
+  }
+
+  artistMap[song.artist].totalPlays += song.plays || 0;
+  artistMap[song.artist].songCount += 1;
+});
+
+const breakoutArtists = Object.values(artistMap)
+  .sort((a, b) => {
+    if (b.totalPlays !== a.totalPlays) {
+      return b.totalPlays - a.totalPlays;
     }
-    acc[song.artist].count += 1;
-    return acc;
-  }, {})
-)
-  .sort((a, b) => b.count - a.count)
+    return b.songCount - a.songCount;
+  })
   .slice(0, 6);
 
   const handleArtistClick = (artistName) => {
@@ -43,37 +55,38 @@ const breakoutArtists = Object.values(
 };
 
 {/**********-TRENDING-GENRES-*********** */}
-  const trendingGenres = Object.values(
-  safeSongs.reduce((acc, song) => {
-    const genre = song.genre || "Other";
+  const genreMap = {};
 
-    if (!acc[genre]) {
-      acc[genre] = {
-        name: genre,
-        count: 0,
-      };
-    }
+safeSongs.forEach((song) => {
+  const genre = song.genre || "Other";
 
-    acc[genre].count += 1;
-    return acc;
-  }, {})
-)
-  .sort((a, b) => b.count - a.count)
+  if (!genreMap[genre]) {
+    genreMap[genre] = {
+      name: genre,
+      totalPlays: 0,
+      songCount: 0,
+    };
+  }
+
+  genreMap[genre].totalPlays += song.plays || 0;
+  genreMap[genre].songCount += 1;
+});
+
+const trendingGenres = Object.values(genreMap)
+  .sort((a, b) => b.totalPlays - a.totalPlays)
   .slice(0, 6);
 
-  const handleGenreClick = (genreName) => {
-  const filtered = songs.filter(
-    (song) =>
-      song.genre?.toLowerCase() === genreName.toLowerCase()
-  );
-
-  if (filtered.length > 0) {
-    setSongs(filtered);
-    setCurrentSong(filtered[0]);
-  }
-};
-
 const [playlists, setPlaylists] = useState([]);
+const [selectedGenre, setSelectedGenre] = useState(null);
+const [genreSongs, setGenreSongs] = useState([]);
+
+const handleGenreClick = (genreName) => {
+  const filtered = safeSongs.filter(
+    (song) => song.genre?.toLowerCase() === genreName.toLowerCase()
+  );
+  setSelectedGenre(genreName);
+  setGenreSongs(filtered);
+};
 
 useEffect(() => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -189,20 +202,32 @@ const handleAddToPlaylist = async (songId) => {
   </div>
 
   <div className="artist-grid">
-    {breakoutArtists.map((artist) => (
-        <div className="artist-card" key={artist.name}>
-        <img src={artist.cover} alt={artist.name} />
+  {breakoutArtists.map((artist) => (
+    <div className="artist-card" key={artist.name}>
+      <img src={artist.image} alt={artist.name} />
 
-        <h3>{artist.name}</h3>
+      <h3>{artist.name}</h3>
 
-        <p>{artist.count} songs</p>
+      <p>🎵 {artist.songCount} songs</p>
 
-        <p>{artist.count} uploaded songs</p>
+      <p>🔥 {artist.totalPlays} plays</p>
 
-        <button>+ Follow</button>
-      </div>
-    ))}
-  </div>
+      <button
+        onClick={() => {
+          const artistSongs = safeSongs.filter(
+            (s) => s.artist === artist.name
+          );
+
+          if (artistSongs.length > 0) {
+            playSong(artistSongs[0], artistSongs);
+          }
+        }}
+      >
+        ▶ Play Artist
+      </button>
+    </div>
+  ))}
+</div>
 </section>
 
       {/* TRENDING GENRES */}
@@ -211,16 +236,59 @@ const handleAddToPlaylist = async (songId) => {
 
   <div className="genre-grid">
       {trendingGenres.map((genre) => (
-      <div className="genre-card" key={genre.name}>
+      <div
+        className="genre-card"
+        key={genre.name}
+        onClick={() => handleGenreClick(genre.name)}
+      >
         <div className="icon"></div>
 
         <h3>{genre.name}</h3>
 
-        <p>{genre.count} songs</p>
+        <p>🎵 {genre.songCount} songs</p>
+        <p>🔥 {genre.totalPlays} plays</p>
       </div>
     ))}
   </div>
 </section>
+
+{selectedGenre && (
+  <section className="section">
+    <div className="section-header">
+      <h2>🎵 {selectedGenre} Songs</h2>
+    </div>
+    <div className="genre-songs-grid">
+      {genreSongs.map((song) => (
+        <div className="trend-card" key={song._id}>
+          <div className="image-wrapper">
+            <img src={`http://localhost:3000/${song.coverImage}`} alt={song.title} />
+            <div className="overlay">
+              <button
+                className="overlay-play-btn"
+                onClick={() => playSong(song, genreSongs)}
+              >
+                ▶
+              </button>
+            </div>
+          </div>
+          <div className="card-content">
+            <h3>{song.title}</h3>
+            <p>{song.artist}</p>
+            <small>{song.plays || 0} plays</small>
+            <div className="card-actions">
+              <button className="Tplay-btn" onClick={() => playSong(song, genreSongs)}>
+                ▶ Play
+              </button>
+              <button className="add-btn" onClick={() => handleAddToPlaylist(song._id)}>
+                ➕ Add
+              </button>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+)}
 
       {/* VIRAL PLAYLISTS */}
       <section className="section">
@@ -232,7 +300,11 @@ const handleAddToPlaylist = async (songId) => {
     {playlists.map((playlist) => (
       <div className="playlist-card" key={playlist._id}>
         <img
-          src="https://placehold.co/400x400?text=Playlist"
+          src={
+            playlist.songs?.[0]?.coverImage
+              ? `http://localhost:3000/${playlist.songs[0].coverImage}`
+              : "/images/playlist-placeholder.png"
+          }
           alt={playlist.name}
         />
 
