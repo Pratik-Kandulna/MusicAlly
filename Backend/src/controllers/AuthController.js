@@ -29,11 +29,17 @@ export const register = async (req, res) => {
 
 // LOGIN
 export const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, role } = req.body;
 
   const user = await User.findOne({ email });
 
   if (!user) return res.status(400).json("User not found");
+
+  if (role && user.role !== role) {
+    return res.status(403).json({
+      message: `This account is registered as ${user.role}. Please log in as ${user.role}.`,
+    });
+  }
 
   const match = await bcrypt.compare(password, user.password);
 
