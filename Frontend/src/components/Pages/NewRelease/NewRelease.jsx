@@ -205,7 +205,7 @@ const handleAddToPlaylist = async (songId) => {
         </div>
 
       </div>
-      <Footer/>
+      
       </div>
     </>
   );

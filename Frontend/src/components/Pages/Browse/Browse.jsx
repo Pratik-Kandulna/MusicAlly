@@ -5,11 +5,12 @@ import "./Browse.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRef } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
+import { FaBookmark, FaSave } from "react-icons/fa";
 
 const categories = [
   { name: "Pop", color: "#ff4d8d" },
-  { name: "Rock", color: "#ff8a00" },
+  { name: "pop-rock", color: "#ff8a00" },
   { name: "Hip Hop", color: "#ff9900" },
   { name: "Electronic", color: "#ff4db8" },
   { name: "Jazz", color: "#00c6ff" },
@@ -22,22 +23,47 @@ const categories = [
   { name: "Metal", color: "#636e72" }
 ];
 
-const artists = [
-  { name: "The Weeknd", 
-    img: "/images/artist1.jpg" },
-  { name: "Taylor Swift", 
-    img: "/images/artist2.jpg" },
-  { name: "Drake", 
-    img: "/images/artist3.jpg" },
-  { name: "Billie Eilish", 
-    img: "/images/artist4.jpg" }
-];
 
 function Browse() {
 
-const {songs, setSongs, search, setSearch, playSong,} = useOutletContext();  
+const { songs, playSong } = useOutletContext();  
+const navigate = useNavigate();
+const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+const userKey = currentUser.email || currentUser._id || currentUser.id || "guest";
+const [savedAlbums, setSavedAlbums] = useState(() =>
+  JSON.parse(
+    localStorage.getItem(`savedAlbums_${userKey}`) ||
+      localStorage.getItem("savedAlbums") ||
+      "[]"
+  )
+);
 const [playlists, setPlaylists] = useState([]);
 
+const artists = Object.values(
+  songs.reduce((acc, song) => {
+    const name = (song.artist || "").trim();
+    if (!name) return acc;
+
+    if (!acc[name]) {
+      acc[name] = {
+        name,
+        img: `http://localhost:3000/${song.coverImage}`,
+        songCount: 0,
+        albums: new Set(),
+      };
+    }
+
+    acc[name].songCount += 1;
+    if (song.album && song.album.trim() !== "" && song.album.trim().toLowerCase() !== "null") {
+      acc[name].albums.add(song.album.trim());
+    }
+
+    return acc;
+  }, {})
+).map((artist) => ({
+  ...artist,
+  albumCount: artist.albums.size,
+}));
 
 useEffect(() => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -47,6 +73,27 @@ useEffect(() => {
     .then((res) => setPlaylists(res.data))
     .catch(console.error);
 }, []);
+
+const handleSaveAlbum = (song) => {
+  const albumName = song.album || song.title;
+  const alreadySaved = savedAlbums.some(album => album.title === albumName);
+  if (alreadySaved) {
+    alert("Album already saved!");
+    return;
+  }
+  const newAlbum = {
+    title: albumName,
+    artist: song.artist,
+    img: `http://localhost:3000/${song.coverImage}`,
+    year: song.year || new Date().getFullYear(),
+    count: 1
+  };
+  const updatedAlbums = [...savedAlbums, newAlbum];
+  setSavedAlbums(updatedAlbums);
+  localStorage.setItem(`savedAlbums_${userKey}`, JSON.stringify(updatedAlbums));
+  localStorage.setItem("savedAlbums", JSON.stringify(updatedAlbums));
+  alert("✅ Album saved!");
+};
 
 const handleAddToPlaylist = async (songId) => {
   const playlistName = prompt(
@@ -103,7 +150,10 @@ const handleAddToPlaylist = async (songId) => {
               <div
                 className="genre-card"
                 key={i}
-                style={{ background: cat.color }}
+                style={{ background: cat.color, cursor: "pointer" }}
+                onClick={() =>
+                  navigate(`/genres/${encodeURIComponent(cat.name.toLowerCase())}`)
+                }
               >
                 <h3>{cat.name}</h3>
               </div>
@@ -120,20 +170,44 @@ const handleAddToPlaylist = async (songId) => {
               <div className="artist-card" key={i}>
                 <img src={artist.img} alt="" />
                 <p>{artist.name}</p>
+                <small>{artist.songCount} song{artist.songCount !== 1 ? "s" : ""} • {artist.albumCount} album{artist.albumCount !== 1 ? "s" : ""}</small>
               </div>
             ))}
           </div>
         </div>
 
-        {/* MOODS */}
+        {/* ALBUMS */}
         <div className="section">
-          <h2>🎧 Mood Picks</h2>
-
-          <div className="mood-grid">
-            <div className="mood-card">Chill Vibes</div>
-            <div className="mood-card">Workout</div>
-            <div className="mood-card">Party</div>
-            <div className="mood-card">Focus</div>
+          <h2>💿 Featured Albums</h2>
+          <div className="song-grid">
+            {Array.from(new Map(songs.filter(song => {
+              const album = song.album;
+              return (
+                typeof album === "string" &&
+                album.trim() !== "" &&
+                album.trim().toLowerCase() !== "null"
+              );
+            }).map(song => [song.album, song])).values()).map((song) => (
+              <div key={song.album || song._id} className="song-card" onClick={() => navigate(`/AlbumDetails`, {
+                state: { albumName: song.album }
+              })} style={{ cursor: 'pointer' }}>
+                <div className="song-cover">
+                  <img src={`http://localhost:3000/${song.coverImage}`} alt={song.album || song.title} />
+                </div>
+                <div className="song-info">
+                  <h3>{song.album || song.title}</h3>
+                  <p>{song.artist}</p>
+                  <div className="song-actions">
+                    <button className="playlist-btn" onClick={(e) => {
+                      e.stopPropagation();
+                      handleSaveAlbum(song);
+                    }}>
+                      <FaBookmark/>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -178,7 +252,7 @@ const handleAddToPlaylist = async (songId) => {
 </div>
 
       </div>
-      <Footer/>
+    
     </div>
     </>
   );

@@ -10,7 +10,7 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 
 const genres = [
   { name: "Pop", tracks: "18.2K", color: "#ff4d8d" },
-  { name: "Rock", tracks: "12.4K", color: "#ff6a00" },
+  { name: "Pop-Rock", tracks: "12.4K", color: "#ff6a00" },
   { name: "Hip Hop", tracks: "10.8K", color: "#ff9900" },
   { name: "Electronic", tracks: "15.3K", color: "#ff4db8" },
   { name: "Jazz", tracks: "8.6K", color: "#00c6ff" },
@@ -55,10 +55,22 @@ const handleAddToPlaylist = async (songId) => {
   // Call your backend API here
 };
 
+const normalizeGenre = (value) =>
+  (value || "")
+    .toLowerCase()
+    .replace(/[-_]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const getGenreTrackCount = (genreName) => {
+  return (songs || []).filter(
+    (song) => normalizeGenre(song.genre) === normalizeGenre(genreName)
+  ).length;
+};
+
 const getGenreSongs = (genreName) => {
   return (songs || []).filter(
-    (song) =>
-      (song.genre || "").toLowerCase() === genreName.toLowerCase()
+    (song) => normalizeGenre(song.genre) === normalizeGenre(genreName)
   );
 };
 
@@ -82,15 +94,18 @@ const getGenreSongs = (genreName) => {
         <div className="genres-container all-genres-grid">
           {genres.map((g, index) => (
             <div
-              className={`genre-card genre-card-${g.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+              className="genre-card"
+              style={{
+                background: `linear-gradient(135deg, ${g.color}, #7aa7ff)`,
+                cursor: "pointer",
+              }}
               key={index}
-              data-color={g.color}
               onClick={() =>
                 navigate(`/genres/${encodeURIComponent(g.name.toLowerCase())}`)
               }
             >
               <h2>{g.name}</h2>
-              <p>{g.tracks} tracks</p>
+              <p>{getGenreTrackCount(g.name)} tracks</p>
 
               <div className="music-icon">♪</div>
             </div>
@@ -98,7 +113,7 @@ const getGenreSongs = (genreName) => {
         </div>
 
       </div>
-      <Footer/>
+      
       </div>
     </>
   );

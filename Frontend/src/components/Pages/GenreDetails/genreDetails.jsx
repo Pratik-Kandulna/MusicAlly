@@ -16,10 +16,17 @@ function GenreDetails() {
     handleAddToPlaylist,
   } = useOutletContext();
 
+  const normalizeGenre = (value) =>
+    (value || "")
+      .toLowerCase()
+      .replace(/[-_]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
   const genreSongs = (songs || []).filter(
     (song) =>
-      (song.genre || "").toLowerCase() ===
-      decodeURIComponent(genreName).toLowerCase()
+      normalizeGenre(song.genre) ===
+      normalizeGenre(decodeURIComponent(genreName))
   );
 
   const toggleLike = async (e, songId) => {
@@ -60,63 +67,71 @@ function GenreDetails() {
       
       <div className="dashboard-container">
         <div className="genre-details-page">
-          <h1>{decodeURIComponent(genreName)}</h1>
-          <p>{genreSongs.length} songs</p>
+          <div className="genre-details-header">
+            <div className="genre-details-text">
+              <h1 className="genre-details-title">{decodeURIComponent(genreName)}</h1>
+              <p className="genre-details-subtitle">{genreSongs.length} songs</p>
+            </div>
+          </div>
 
-          <div className="genre-song-list">
+          <div className="genre-song-list genre-track-list">
             {genreSongs.map((song) => (
               <div
                 className={`genre-song-card ${String(currentSong?._id) === String(song._id) ? "active-genre-card" : ""}`}
                 key={song._id}
                 onClick={() => playSong(song, genreSongs)}
               >
-                <img
-                  className="genre-song-cover"
-                  src={`http://localhost:3000/${song.coverImage}`}
-                  alt={song.title}
-                />
-                <div className="genre-song-info">
-                  <h3>{song.title}</h3>
-                  <p>{song.artist}</p>
-                </div>
-                <div className="genre-card-actions">
-                  <div className="genre-like-btn">
-                    {(likedSongs || []).some((id) => String(id) === String(song._id)) ? (
-                      <FaHeart
-                        color="red"
-                        style={{ cursor: "pointer" }}
-                        onClick={(e) => toggleLike(e, song._id)}
-                      />
-                    ) : (
-                      <FaRegHeart
-                        style={{ cursor: "pointer" }}
-                        onClick={(e) => toggleLike(e, song._id)}
-                      />
-                    )}
+                <div className="genre-song-main">
+                  <img
+                    className="genre-song-cover"
+                    src={`http://localhost:3000/${song.coverImage}`}
+                    alt={song.title}
+                  />
+                  <div className="genre-song-info">
+                    <h3>{song.title}</h3>
+                    <p>{song.artist}</p>
                   </div>
-
-                  <button
-                    className="genre-add-btn"
-                    onClick={async (e) => {
-                      e.stopPropagation();
-                      if (!handleAddToPlaylist) return;
-                      await handleAddToPlaylist(song);
-                    }}
-                  >
-                    + Add
-                  </button>
                 </div>
-                {String(currentSong?._id) === String(song._id) && (
-                  <button
-                    className="genre-play-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      togglePlay();
-                    }}
-                  >
-                    {isPlaying ? "⏸" : "▶"}
-                  </button>
-                )}
+                <div className="genre-song-right">
+                  <div className="genre-card-actions">
+                    <div className="genre-like-btn">
+                      {(likedSongs || []).some((id) => String(id) === String(song._id)) ? (
+                        <FaHeart
+                          color="red"
+                          style={{ cursor: "pointer" }}
+                          onClick={(e) => toggleLike(e, song._id)}
+                        />
+                      ) : (
+                        <FaRegHeart
+                          style={{ cursor: "pointer" }}
+                          onClick={(e) => toggleLike(e, song._id)}
+                        />
+                      )}
+                    </div>
+
+                    <button
+                      className="genre-add-btn"
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        if (!handleAddToPlaylist) return;
+                        await handleAddToPlaylist(song);
+                      }}
+                    >
+                      + Add
+                    </button>
+                  </div>
+                  {String(currentSong?._id) === String(song._id) && (
+                    <button
+                      className="genre-play-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        togglePlay();
+                      }}
+                    >
+                      {isPlaying ? "⏸" : "▶"}
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
           </div>

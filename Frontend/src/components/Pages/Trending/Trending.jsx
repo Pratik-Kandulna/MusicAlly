@@ -319,7 +319,7 @@ const handleAddToPlaylist = async (songId) => {
 </section>
 
     </div>
-    <Footer/>
+  
     </div>
     </>
   );

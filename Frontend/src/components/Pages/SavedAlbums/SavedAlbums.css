@@ -1,3 +1,10 @@
+.dashboard-container {
+  margin-top: 100px;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+
 .albums-page {
   margin-top: 100px;
   padding: 20px;

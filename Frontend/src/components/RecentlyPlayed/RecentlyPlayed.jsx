@@ -106,7 +106,7 @@ const handleAddToPlaylist = async (songId) => {
 
               {/* PLAY BUTTON */}
               <div
-                className="play-btn"
+                className="recent-play-btn"
                 onClick={(e) => {
                   e.stopPropagation();
                   playSong(song, songs)

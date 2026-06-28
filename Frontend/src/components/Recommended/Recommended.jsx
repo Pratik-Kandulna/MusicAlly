@@ -1,32 +1,24 @@
 import "./Recommended.css";
-
-const RPlaylists = [
-  {
-    title: "Cosmic Tunes",
-    tracks: "45 tracks • 3h 12m",
-    img: "/images/Cosmic Tunes.jpeg",
-  },
-  {
-    title: "Nightfall Notes",
-    tracks: "32 tracks • 2h 24m",
-    img: "/images/Nightfall Notes.jpg",
-  },
-  {
-    title: "Lost Souls",
-    tracks: "28 tracks • 2h 45m",
-    img: "/images/Lost Souls.jpeg",
-  },
-  {
-    title: "verload",
-    tracks: "52 tracks • 3h 48m",
-    img: "/images/Overload.jpeg",
-  },
-];
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Recommended() {
+  const [playlists, setPlaylists] = useState([]);
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+  useEffect(() => {
+    if (!(user._id || user.id)) return;
+
+    axios
+      .get(`http://localhost:3000/api/playlists/${user._id || user.id}`)
+      .then((res) => setPlaylists(Array.isArray(res.data) ? res.data : []))
+      .catch(console.error);
+  }, []);
+
   return (
     <div className="playlist-section">
-      
       {/* HEADER */}
       <div className="playlist-header">
         <h2>Recommended Playlists</h2>
@@ -35,13 +27,26 @@ function Recommended() {
 
       {/* GRID */}
       <div className="playlist-grid">
-        {RPlaylists.map((item, index) => (
-          <div className="playlist-card" key={index}>
-            <img src={item.img} alt={item.title} />
-
+        {playlists.map((item) => (
+          <div
+            className="playlist-card"
+            key={item._id}
+            onClick={() => navigate(`/playlistDetails/${item._id}`)}
+            style={{ cursor: "pointer" }}
+          >
+            <img
+              src={
+                item.coverImage
+                  ? `http://localhost:3000/${item.coverImage}`
+                  : item.songs?.[0]?.coverImage
+                  ? `http://localhost:3000/${item.songs[0].coverImage}`
+                  : "/images/default-playlist.jpg"
+              }
+              alt={item.name}
+            />
             <div className="playlist-info">
-              <h3>{item.title}</h3>
-              <p>{item.tracks}</p>
+              <h3>{item.name}</h3>
+              <p>{(item.songs?.length || 0)} tracks</p>
             </div>
           </div>
         ))}

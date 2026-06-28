@@ -2,7 +2,7 @@ import "./sNavbar.css";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
-import { FaBell, FaFonticonsFi, FaSearch, FaUser } from "react-icons/fa";
+import { FaBell, FaBellSlash, FaFonticonsFi, FaSearch, FaUser } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
 
 
@@ -119,7 +119,7 @@ const handleLogout = () => {
 
     <NavLink to="/Browse">
 
-      <FaSearch />
+      <FaSearch/>
 
       Browse
 
@@ -214,9 +214,9 @@ const handleLogout = () => {
 
           <div className="sicon">
             <NavLink to="/Login">
-             <FaBell/>
+             <FaBell size={25} color="black"/>
             </NavLink>
-            <span className="sdot"></span>
+            
           </div>
 
           
@@ -224,7 +224,7 @@ const handleLogout = () => {
           
             <button className="sicon">
             <div className="sdropdown" onClick={() => toggleMenu("profile")}>
-            <FaUser/>
+            <FaUser size={25}/>
             {activeMenu === "profile" && (
               <div className="sdropdown-menu">
                 <NavLink to="/profile">

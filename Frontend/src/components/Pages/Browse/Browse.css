@@ -226,4 +226,29 @@
     opacity: 1;
     transform: none;
   }
+
+  .artist-row {
+    display: flex;
+    overflow-x: auto;
+    gap: 16px;
+    padding-bottom: 10px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .artist-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .artist-card {
+    flex: 0 0 auto;
+    min-width: 120px;
+  }
+}
+
+.artist-card small {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: #666;
 }

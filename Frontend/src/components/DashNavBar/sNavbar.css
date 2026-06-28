@@ -202,8 +202,8 @@
 
 
 .sicon img {
-  width: 25px;      /* for image icons */
-  height: 25px;
+  width: 50px;      /* for image icons */
+  height: 50px;
 }
 
 /* BELL DOT */
@@ -267,7 +267,7 @@
 }
 
 .search-item:hover {
-  background: #333;
+  background: #c083ec;
 }
 
 .no-result {

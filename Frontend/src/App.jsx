@@ -20,12 +20,14 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import PlaylistDetails from "./components/Pages/PlaylistDetails/playListDetails";
 import GenreDetails from "./components/Pages/GenreDetails/genreDetails";
 import ManageSongs from "./components/Pages/Upload/ManageSongs";
+import AlbumDetails from "./components/albumDetails";
 
 function App() {
 
   const [search, setSearch] = useState("");
   const [songs, setSongs] = useState([]);
   const [likedSongs, setLikedSongs] = useState([]);
+  const [playlists, setPlaylists] = useState([]);
   const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
   const [currentSong, setCurrentSong] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -67,6 +69,15 @@ function App() {
     .catch(console.error);
 }, [currentUser]);
 
+  useEffect(() => {
+    if (!currentUser?.id && !currentUser?._id) return;
+
+    axios
+      .get(`http://localhost:3000/api/playlists/${currentUser.id || currentUser._id}`)
+      .then((res) => setPlaylists(Array.isArray(res.data) ? res.data : []))
+      .catch(console.error);
+  }, [currentUser]);
+
 
   return (
     <>   
@@ -90,6 +101,8 @@ function App() {
         setCurrentSong={setCurrentSong}
         likedSongs={likedSongs}
         setLikedSongs={setLikedSongs}
+        playlists={playlists}
+        setPlaylists={setPlaylists}
       />
     }
   >
@@ -112,6 +125,15 @@ function App() {
   element={
     <ProtectedRoute>
       <Browse currentUser={currentUser} />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/AlbumDetails"
+  element={
+    <ProtectedRoute>
+      <AlbumDetails currentUser={currentUser}/>
     </ProtectedRoute>
   }
 />

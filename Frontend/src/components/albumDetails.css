@@ -1,0 +1,214 @@
+.dashboard-container {
+  margin-top: 100px;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+
+.album-details-page {
+  max-width: 1100px;
+  margin: 32px auto;
+  padding: 32px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08), 0 1.5px 6px rgba(0,0,0,0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-top: 100px;
+  background: #f5f5f5;
+  min-height: 100vh;
+  
+}
+
+.album-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: #444;
+  font-size: 1.6rem;
+  cursor: pointer;
+  margin-right: 14px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+.back-btn:hover {
+  background: #f3f3f3;
+}
+
+.album-title {
+  font-size: 2.1rem;
+  font-weight: 700;
+  margin: 0;
+  color: #252525;
+}
+
+.album-subtitle {
+  font-size: 1.1rem;
+  color: #888;
+  margin-top: 2px;
+}
+
+.album-song-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.album-song-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.album-song-cover {
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.album-song-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.album-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.album-song-title {
+  font-size: 1.09rem;
+  font-weight: 600;
+  color: #232323;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.album-song-artist {
+  font-size: 0.98rem;
+  color: #777;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.album-song-duration {
+  font-size: 0.96rem;
+  color: #b2b2b2;
+  margin-left: 16px;
+  min-width: 44px;
+  text-align: right;
+}
+
+.album-song-actions {
+  display: flex;
+  gap: 11px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-left: 18px;
+}
+
+/* Shared button styles */
+.album-play-btn,
+.album-like-btn,
+.album-playlist-btn {
+  border: none;
+  background: #ffffff;
+  color: #333;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #ddd;
+}
+.album-play-btn:hover,
+.album-like-btn:hover,
+.album-playlist-btn:hover {
+  background: #f4f4f4;
+  transform: translateY(-1px);
+}
+
+.album-play-btn {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+.album-play-btn:hover {
+  background: #222;
+}
+
+.like-btn.liked {
+  background: #ffe5ec;
+  color: #d72660;
+}
+
+.album-like-btn svg,
+.album-playlist-btn svg {
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .album-details-page {
+    padding: 10px;
+    max-width: 100vw;
+  }
+  .album-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .album-title {
+    font-size: 1.5rem;
+  }
+  .album-song-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+  }
+  .album-song-cover {
+    width: 60px;
+    height: 60px;
+  }
+  .album-song-actions {
+    margin-left: 0;
+    gap: 8px;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .album-buttons {
+    margin-left: auto;
+    display: flex;
+    gap: 6px;
+  }
+
+  .album-play-btn,
+  .album-like-btn,
+  .album-playlist-btn {
+    flex: unset;
+    justify-content: center;
+    padding: 7px 10px;
+  }
+}

@@ -15,6 +15,8 @@ function MainLayout({
   currentSong,
   likedSongs,
   setLikedSongs,
+  playlists,
+  setPlaylists,
 }) {
 
   const safeSongs = songs || [];
@@ -164,7 +166,26 @@ useEffect(() => {
         setCurrentSong={setCurrentSong}
       />
 
-      <Outlet context={{ songs, safeSongs, setSongs, search, setSearch, setCurrentSong, currentSong, isPlaying, setIsPlaying, likedSongs, setLikedSongs, toggleLike, playSong, togglePlay }} />
+      <Outlet
+        context={{
+          songs,
+          safeSongs,
+          setSongs,
+          search,
+          setSearch,
+          setCurrentSong,
+          currentSong,
+          isPlaying,
+          setIsPlaying,
+          likedSongs,
+          setLikedSongs,
+          playlists,
+          setPlaylists,
+          toggleLike,
+          playSong,
+          togglePlay,
+        }}
+      />
 
 
       {currentSong && (
@@ -249,47 +270,57 @@ useEffect(() => {
         {/*******-FULL-PLAYER-********/}
     {isExpanded && (
   <div className="FullPlayer">
-    <button onClick={() => setIsExpanded(false)}><FaArrowDown/></button>
-
-    <img src={`http://localhost:3000/${currentSong.coverImage}`} />
-
-    <h2>{currentSong.title}</h2>
-    <p>{currentSong.artist}</p>
-
-    <input
-      type="range"
-      min="0"
-      max={audioRef.current?.duration || 0}
-      value={progress}
-      onChange={(e) => {
-        const value = e.target.value;
-        audioRef.current.currentTime = value;
-        setProgress(value);
-      }}
-    />
-
-    <div>
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          playPrev();
-      }}>
-      <FaBackward/>
+    <button
+      className="full-player-close"
+      onClick={() => setIsExpanded(false)}
+    >
+      <FaArrowDown />
     </button>
 
-      <button 
-        onClick={(e) => {e.stopPropagation();
-          togglePlay();}}>
-        {isPlaying ? <FaPause/> : <FaPlay/>}
-      </button>
+    <div className="full-player-content">
+      <img
+        className="full-player-cover"
+        src={`http://localhost:3000/${currentSong.coverImage}`}
+        alt={currentSong.title}
+      />
 
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          playNext();
-      }}>
-        <FaForward/>
-      </button>
+      <div className="full-player-info">
+        <h2>{currentSong.title}</h2>
+        <p>{currentSong.artist}</p>
+      </div>
+
+      <input
+        className="full-player-progress"
+        type="range"
+        min="0"
+        max={audioRef.current?.duration || 0}
+        value={progress}
+        onChange={(e) => {
+          const value = e.target.value;
+          audioRef.current.currentTime = value;
+          setProgress(value);
+        }}
+      />
+
+      <div className="full-player-controls">
+        <button onClick={(e) => { e.stopPropagation(); playPrev(); }}>
+          <FaBackward />
+        </button>
+
+        <button
+          className="full-player-play"
+          onClick={(e) => {
+            e.stopPropagation();
+            togglePlay();
+          }}
+        >
+          {isPlaying ? <FaPause /> : <FaPlay />}
+        </button>
+
+        <button onClick={(e) => { e.stopPropagation(); playNext(); }}>
+          <FaForward />
+        </button>
+      </div>
     </div>
   </div>
 )}
