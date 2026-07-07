@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build files
+dist/
+build/
+
+# Environment
+.env
+.env.*
+
+# Logs
+*.log
+
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/
+
+# Runtime uploads
+Backend/uploads/
