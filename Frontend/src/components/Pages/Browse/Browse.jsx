@@ -23,6 +23,12 @@ const categories = [
   { name: "Metal", color: "#636e72" }
 ];
 
+const normalizeGenreName = (value) =>
+  (value || "")
+    .trim()
+    .replace(/[-_]/g, " ")
+    .replace(/\s+/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
 
 function Browse() {
 
@@ -64,6 +70,29 @@ const artists = Object.values(
   ...artist,
   albumCount: artist.albums.size,
 }));
+
+const dynamicCategories = Array.from(
+  new Set(
+    songs
+      .map((song) => normalizeGenreName(song.genre))
+      .filter(Boolean)
+  )
+).map((name, index) => ({
+  name,
+  color: categories[index % categories.length].color,
+}));
+
+const mergedCategories = [
+  ...dynamicCategories,
+  ...categories.filter(
+    (cat) =>
+      !dynamicCategories.some(
+        (dyn) =>
+          normalizeGenreName(dyn.name).toLowerCase() ===
+          normalizeGenreName(cat.name).toLowerCase()
+      )
+  ),
+];
 
 useEffect(() => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -146,7 +175,7 @@ const handleAddToPlaylist = async (songId) => {
           <h2>🎵 Browse Genres</h2>
 
           <div className="genre-grid">
-            {categories.map((cat, i) => (
+            {mergedCategories.map((cat, i) => (
               <div
                 className="genre-card"
                 key={i}

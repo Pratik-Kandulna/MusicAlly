@@ -101,6 +101,7 @@ navigate("/Dashboard", { state: { refresh: true } });
             <option value="hip hop">Hip Hop</option>
             <option value="pop rock">Pop Rock</option>
             <option value="lofi">Lo-fi</option>
+            <option value="EDM">EDM</option>
           </select>
 
           <input

@@ -74,6 +74,34 @@ const getGenreSongs = (genreName) => {
   );
 };
 
+const normalizeGenreName = (value) =>
+  (value || "")
+    .trim()
+    .replace(/[-_]/g, " ")
+    .replace(/\s+/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+
+const dynamicGenres = Array.from(
+  new Set(
+    (songs || [])
+      .map((song) => normalizeGenreName(song.genre))
+      .filter(Boolean)
+  )
+).map((name, index) => ({
+  name,
+  color: genres[index % genres.length].color,
+}));
+
+const mergedGenres = [
+  ...dynamicGenres,
+  ...genres.filter(
+    (g) =>
+      !dynamicGenres.some(
+        (d) => normalizeGenre(d.name) === normalizeGenre(g.name)
+      )
+  ),
+];
+
   return (
     <>
      <div className="dashboard-container">
@@ -92,7 +120,7 @@ const getGenreSongs = (genreName) => {
         {/* Clicking a genre card navigates to its dedicated genre page */}
         {/* GRID */}
         <div className="genres-container all-genres-grid">
-          {genres.map((g, index) => (
+          {mergedGenres.map((g, index) => (
             <div
               className="genre-card"
               style={{
